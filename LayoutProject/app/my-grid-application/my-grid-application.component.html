@@ -1,0 +1,21 @@
+<div>
+    <my-form [layoutOptions]="SearchFormOptions" (onLayoutChange)= "ViewGrid($event)"></my-form>
+</div>
+<br>
+<br>
+
+ <div [(hidden)]="isGridHidden" >
+    <ag-grid-angular style="width: 1100px; height: 350px;margin-left:30px" class="ag-fresh" [rowData]="rowData" [columnDefs]="columnDefs"
+        [gridOptions]="gridOptions" (gridReady)="onGridReady($event)" (rowClicked)='onRowClicked($event)' (cellEditingStarted)='onCellEditingStarted($event)'
+        (cellEditingStopped)='onCellEditingStopped($event)' (selectionChanged)='onSelectionChanged($event)' (cellValueChanged)='onCellValueChanged($event)'
+        (dragstart)="setDrag($event)" (dragStopped)="dragStopped($event)" (dragover)="onDragOver($event)" (drop)="onDrop($event)"
+        enableFilter enableSorting id="myGrid" #grid>
+    </ag-grid-angular>
+</div> 
+
+<div class="row" [(hidden)] = "isButtonHidden">
+    <div class="col-xs-10"></div>
+    <div class="col-xs-2">
+        <button class="btn btn-primary"  (click)="onSaveClicked()" [(disabled)]="isSaveDisabled">{{ buttonTitle }}</button>
+    </div>
+</div>

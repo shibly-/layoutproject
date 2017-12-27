@@ -1,0 +1,40 @@
+<div class="container">
+    <form class="form-inline" style="margin-left:30px" novalidate #formLayout>
+        <div class="row" #addForm [(hidden)]="isAddRowhidden">
+            <div class="col-xs-5">
+                <div class="form-group" [class.has-error]="haslayoutError">
+                    <label>{{ label }}</label>
+                    <input type="text" #layoutDescr [(ngModel)]="layoutDescription" placeholder="Enter layout Description" name="layoutDescr"
+                        class="form-control" (change)="validateLayout(layoutDescr.value)">
+                </div>
+            </div>
+            <div class="col-xs-5">
+                <div class="form-group">
+                    <label>Layout ID</label>
+                    <input type="text" class="form-control" name="layoutID" [(ngModel)]="layout_id" disabled>
+                </div>
+            </div>
+        </div>
+        <div class="row" #editForm [(hidden)]="!isAddRowhidden">
+            <div class="col-xs-5">
+                <div class="form-group" [class.has-error]="haslayoutError">
+                    <label class="control-label">{{ label }}</label>
+                    <select class="form-control" #layoutDescr name="layoutName" [(ngModel)]="layoutOption" (blur)="validateLayoutDescr(layoutDescr.value)"
+                        (change)="validateLayoutDescr(layoutDescr.value)">
+
+                        <option value="default">Select a layout description..</option>
+                        <option *ngFor="let layout of layoutOptions">
+                            {{ layout }}
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-xs-5">
+                <div class="form-group">
+                    <label>Layout ID</label>
+                    <input type="text" class="form-control" name="layoutID" [ngModel]="layout_id" disabled>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

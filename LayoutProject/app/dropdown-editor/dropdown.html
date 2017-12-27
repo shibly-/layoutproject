@@ -1,0 +1,9 @@
+<div #dropdown>
+    <select #layoutDescr name="layoutName" [(ngModel)]="colOption"
+        (blur)="validatecolOption(layoutDescr.value)" (change)="validateLayout(layoutDescr.value)"></select>   
+        <option value="default">Select a value..</option>
+        <option *ngFor="let option of dropdownOptions">
+            {{ option }}
+        </option>
+    </select>
+</div>
