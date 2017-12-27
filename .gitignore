@@ -1,3 +1,6 @@
 
 /LayoutProject/node_modules
 /packages
+/LayoutProject/obj
+/LayoutProject/dist
+/LayoutProject/bin
