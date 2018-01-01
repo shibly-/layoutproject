@@ -7,7 +7,7 @@ import { GridOptions, RowNode } from "ag-grid";
 
 import { DragDropObject, DRAG_DROP_SOURCE } from '../drag.drop.object';
 
-//import "ag-grid-enterprise";
+import "ag-grid-enterprise";
 import { AppService } from "../app.service";
 
 @Component({
@@ -72,7 +72,7 @@ export class MyGridApplicationComponent {
     ngOnDestroy(){
 
     }
-    onGridReady(params) {
+    onGridReady(params) {        
         params.api.sizeColumnsToFit();
     }
 

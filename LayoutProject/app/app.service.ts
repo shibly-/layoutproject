@@ -113,12 +113,12 @@ export class AppService{
     }
 
     public getList() : Observable<any>{
-        return this.http.get('../../assets/LayoutData.json')
+        return this.http.get('./app/assets/LayoutData.json')
         .map((res:any) => res.json());
     }
     
     public getLayoutList(){
-        return this.http.get('../../assets/LayoutList.json')
+        return this.http.get('./app/assets/LayoutList.json')
         .map((res:any) => res.json()); 
     }
 
@@ -127,7 +127,7 @@ export class AppService{
         console.log(jsonData);
         let headers=new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers});
-        return this.http.post('../../assets/LayoutData.json',jsonData,options).map((res:any) => res.json());
+        return this.http.post('./app/assets/LayoutData.json',jsonData,options).map((res:any) => res.json());
     }
     messageDialog(title: string, message: string, callback?: Function) {
         this.notifyAll({ key: 'messageDialog', value: { title: title, message: message, callback: callback } });
