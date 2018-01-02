@@ -118,7 +118,6 @@ export class AppService{
     }
     
     public getLayoutList(){
-        //return this.http.get('./app/assets/LayoutList.json')
         return this.http.get('api/AggridData/getLayoutList')
             .map((res: any) => res.json()); 
     }

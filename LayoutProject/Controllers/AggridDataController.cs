@@ -24,19 +24,20 @@ namespace LayoutProject.Controllers
             using (StreamReader r = new StreamReader(filePath))
             {
                 string json = r.ReadToEnd();
-                var obj = JsonConvert.SerializeObject(json, Formatting.Indented,
+                var items = JsonConvert.DeserializeObject<LayoutListModel>(json);
+                var obj = JsonConvert.SerializeObject(items, Formatting.Indented,
                             new JsonSerializerSettings
                             {
                                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore
                             });
 
                 return obj;
-            }           
+            }
         }
     }
     
     public class LayoutListModel
     {
-        public dynamic LayoutList { get; set; }
+        public List<string> LayoutList { get; set; }
     }
 }
