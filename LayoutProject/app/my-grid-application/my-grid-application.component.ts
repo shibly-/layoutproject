@@ -7,7 +7,7 @@ import { GridOptions, RowNode } from "ag-grid";
 
 import { DragDropObject, DRAG_DROP_SOURCE } from '../drag.drop.object';
 
-import "ag-grid-enterprise";
+//import "ag-grid-enterprise";
 import { AppService } from "../app.service";
 
 @Component({
@@ -266,8 +266,11 @@ export class MyGridApplicationComponent {
     private formOptions() {
         //this.SearchFormOptions = this.appService.getLayoutList();
         this.appService.getLayoutList().subscribe(data => {
-            this.SearchFormOptions = data.LayoutList;
-        })
+            console.log(data);
+            let d = JSON.parse(data); 
+            console.log(d); 
+            this.SearchFormOptions = d.LayoutList;
+        });
     }
 
     private onRowClicked(event) {

@@ -5,7 +5,7 @@ import { FormComponent } from '../my-form/Form.component';
 
 import {GridOptions} from "ag-grid";
 
-import "ag-grid-enterprise";
+//import "ag-grid-enterprise";
 
 @Component({
     selector: 'edit-component',

@@ -40,6 +40,9 @@
             },
             'ag-grid-angular': {
                 main: 'main.js'
+            },
+            'ag-grid-enterprise': {
+                main: 'main.js'
             }
         }
     }
