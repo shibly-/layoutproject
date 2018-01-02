@@ -45,7 +45,6 @@ export class MyGridApplicationComponent {
         }
         this.declare_gridOptions();
         this.isSaveDisabled = true;
-
     }
 
     ngOnInit() {
@@ -72,6 +71,7 @@ export class MyGridApplicationComponent {
     ngOnDestroy(){
 
     }
+
     onGridReady(params) {        
         params.api.sizeColumnsToFit();
     }
@@ -94,13 +94,11 @@ export class MyGridApplicationComponent {
                 headerName: "Column Order",
                 field: "col_num",
                 editable: false
-                //cellEditorFramework : EditorComponent
             },
             {
                 headerName: "Column Name",
                 field: "col_name",
                 editable: this.decideEdit()
-                //cellEditorFramework : EditorComponent
             },
             {
                 headerName: "Standard Column Name",
@@ -109,7 +107,6 @@ export class MyGridApplicationComponent {
                 cellEditor: 'richSelect',
                 cellEditorParams: {
                     values: this.Standard_col_values,
-
                 }
             },
             {
@@ -359,6 +356,21 @@ export class MyGridApplicationComponent {
             body.appendChild(a);
             a.click();
             a.remove();
+        }
+        else if (this.path == "edit") {
+            this.layoutData = {
+                LayoutID: this.form.layout_id,
+                LayoutDescr: this.form.layoutOption,
+                DataList: data,
+            }
+
+            let layoutDataWrapper: any = { "LayoutDetails": this.layoutData };
+            let layoutDataAsJSON = JSON.stringify(layoutDataWrapper);
+            console.log(this.layoutData);
+            console.log(this.form);
+            this.appService.saveLayoutList(layoutDataWrapper).subscribe((data) => {
+                console.log(AddedData);
+            });
         }
 		else{
 			if (this.form.layoutOption == "default") {

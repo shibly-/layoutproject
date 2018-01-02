@@ -32,7 +32,7 @@
                 { "id": 3, "col_num": 3, "col_name": "ORDER ADDRESS", "standard_col_name": "New One Needed", "data_type": "String", "mandatory_col": "TRUE", "unique_key": "FALSE" },
                 { "id": 4, "col_num": 4, "col_name" : "ORDER PRICE", "standard_col_name": "New One Needed", "data_type": "String", "mandatory_col": "FALSE", "unique_key": "FALSE" },
                 { "id": 5, "col_num": 5, "col_name": "SHIPPING ADDRESS", "standard_col_name": "New One Needed", "data_type": "String", "mandatory_col": "TRUE", "unique_key": "TRUE" }
-            ],
+                ],
                 "standard_col_values" : ["Order Name","Order_name","Order ID","Order_ID","Order Price","Order_Price","New One Needed"]
             }
         ]

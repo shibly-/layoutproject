@@ -57,6 +57,22 @@ namespace LayoutProject.Controllers
                 return obj;
             }
         }
+
+        [Route("saveLayoutData")]
+        [HttpPost]
+        public void saveLayoutData(LayoutDModel LayoutDetails)
+        {
+            bool exists = System.IO.Directory.Exists(HttpContext.Current.Server.MapPath("~/app/assets/"));
+            if (exists) {
+                var filePath = HttpContext.Current.Server.MapPath("~/app/assets/LayoutData.json");
+                using (StreamReader r = new StreamReader(filePath))
+                {
+                    string json = r.ReadToEnd();
+                    var items = JsonConvert.DeserializeObject<LayoutDModel>(json);
+                    var v = LayoutDetails;
+                }
+            }
+        }
     }
     
     public class LayoutListModel
