@@ -29,8 +29,9 @@ export class FormComponent{
         }else{
             this.isAddRowhidden = true;
         }
-         this.appService.getList().subscribe(data => {
-            this.appService.layoutdata = data.LayoutDetails;
+        this.appService.getList().subscribe(data => {
+            let d = JSON.parse(data); 
+            this.appService.layoutdata = d.LayoutDetails;
         });
     }
 

@@ -266,9 +266,7 @@ export class MyGridApplicationComponent {
     private formOptions() {
         //this.SearchFormOptions = this.appService.getLayoutList();
         this.appService.getLayoutList().subscribe(data => {
-            console.log(data);
             let d = JSON.parse(data); 
-            console.log(d); 
             this.SearchFormOptions = d.LayoutList;
         });
     }
