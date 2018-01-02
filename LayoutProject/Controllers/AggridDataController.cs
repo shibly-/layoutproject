@@ -60,7 +60,7 @@ namespace LayoutProject.Controllers
 
         [Route("saveLayoutData")]
         [HttpPost]
-        public void saveLayoutData(LayoutDModel LayoutDetails)
+        public void saveLayoutData([FromBody]LayoutDModel LayoutDetails)
         {
             bool exists = System.IO.Directory.Exists(HttpContext.Current.Server.MapPath("~/app/assets/"));
             if (exists) {
@@ -69,7 +69,8 @@ namespace LayoutProject.Controllers
                 {
                     string json = r.ReadToEnd();
                     var items = JsonConvert.DeserializeObject<LayoutDModel>(json);
-                    var v = LayoutDetails;
+
+                   
                 }
             }
         }

@@ -364,7 +364,7 @@ export class MyGridApplicationComponent {
                 DataList: data,
             }
 
-            let layoutDataWrapper: any = { "LayoutDetails": this.layoutData };
+            let layoutDataWrapper: any = { LayoutDetails: [this.layoutData] };
             let layoutDataAsJSON = JSON.stringify(layoutDataWrapper);
             console.log(this.layoutData);
             console.log(this.form);
