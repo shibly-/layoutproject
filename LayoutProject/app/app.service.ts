@@ -112,8 +112,9 @@ export class AppService{
         // }
     }
 
-    public getList() : Observable<any>{
-        return this.http.get('./app/assets/LayoutData.json')
+    public getList(): Observable<any> {        
+        //return this.http.get('./app/assets/LayoutData.json')
+        return this.http.get('api/AggridData/getLayoutData')
             .map((res:any) => res.json());
     }
     
