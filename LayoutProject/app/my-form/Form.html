@@ -36,5 +36,11 @@
                 </div>
             </div>
         </div>
-    </form>
+        <div class="row" [(hidden)]="hideLayoutMsg" [class.has-error]="!hideLayoutMsg">
+            <div class="col-xs-10">
+                <br>
+                <label class="control-label" style="font-weight: normal">{{ layoutRelatedMsg }}</label>
+            </div>
+        </div>
+</form>
 </div>

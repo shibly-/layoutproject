@@ -16,7 +16,9 @@ export class FormComponent{
     layoutOption : string = "default";
     haslayoutError : boolean = false;
     path:string;
-    isAddRowhidden : boolean;
+    isAddRowhidden: boolean;
+    hideLayoutMsg: boolean = true;
+    layoutRelatedMsg: string = "";
     filteredData : any[];
 
     constructor(private route:ActivatedRoute, private appService : AppService){
@@ -49,15 +51,23 @@ export class FormComponent{
         return flag;
     }
 
-    private validateLayoutDescr(value){
+    private validateLayoutDescr(value) {
+        this.hideLayoutMsg = true;
         if(value === "default"){
             this.haslayoutError = true;
-            this.onLayoutChange.emit(value);
+            this.onLayoutChange.emit(value);            
         }else{
             this.haslayoutError = false;
             this.filteredData = this.appService.layoutdata.filter(element => element.LayoutDescr === value);
             this.layout_id = this.filteredData[0].LayoutID; 
-            this.onLayoutChange.emit(this.filteredData);
+            if (!this.filteredData[0].IsDeleted)
+                this.onLayoutChange.emit(this.filteredData);
+            else {
+                this.haslayoutError = true;
+                this.hideLayoutMsg = false;
+                this.layoutRelatedMsg = "The layout: \"" + this.filteredData[0].LayoutDescr  + "\" - is already deleted."
+                this.onLayoutChange.emit("default");
+            }   
         }
     }
 }

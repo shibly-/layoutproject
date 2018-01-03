@@ -46,7 +46,6 @@ export class AppService{
 
     public saveLayoutList(data) {
         var jsonData = JSON.stringify(data);
-        //console.log(jsonData);
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
         return this.http.post('api/AggridData/saveLayoutData', data, options).map((res: any) => res.json());

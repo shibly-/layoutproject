@@ -57,11 +57,11 @@ export class MyGridApplicationComponent {
             this.isGridHidden = true;
             this.isButtonHidden = true;
         } else if (this.path == "delete") {
-            this.buttonTitle = "Delete"
+            this.buttonTitle = "Delete";
         } else if (this.path == "export") {
-            this.buttonTitle = "Export"
-        } else if (this.path == "Clone") {
-            this.buttonTitle = "Clone"
+            this.buttonTitle = "Export";
+        } else if (this.path == "clone") {
+            this.buttonTitle = "Clone";
         } else {
             this.isButtonHidden = true;
             this.isGridHidden = true;
@@ -343,7 +343,7 @@ export class MyGridApplicationComponent {
                 DataList : data,
             }
             
-            var layoutDataLabel = this.form.layoutOption.toString();
+            var layoutDataLabel = "LayoutDetails"; //this.form.layoutOption.toString();
             let layoutDataWrapper: any = { [layoutDataLabel] : this.layoutData };
             let layoutDataAsJSON = JSON.stringify(layoutDataWrapper);
             let uri = "data:application/json;charset=UTF-8," + encodeURIComponent(layoutDataAsJSON);
@@ -351,7 +351,7 @@ export class MyGridApplicationComponent {
             let a = document.createElement('a');
             let url = "data:application/json;charset=UTF-8," + encodeURIComponent(layoutDataAsJSON);
             a.setAttribute("href", url);
-            a.setAttribute("download", (layoutDataLabel.split(' ').join('_').toLowerCase())+"_layout_details.json");
+            a.setAttribute("download", ((this.form.layoutOption.toString()).split(' ').join('_').toLowerCase())+"_layout_details.json");
             var body = document.getElementsByTagName('body')[0];
             body.appendChild(a);
             a.click();
@@ -366,8 +366,20 @@ export class MyGridApplicationComponent {
 
             let layoutDataWrapper: any = { LayoutDetails: [this.layoutData] };
             let layoutDataAsJSON = JSON.stringify(layoutDataWrapper);
-            console.log(this.layoutData);
-            console.log(this.form);
+            this.appService.saveLayoutList(layoutDataWrapper).subscribe((data) => {
+                //console.log(AddedData);
+            });
+        }
+        else if (this.path == "delete") {
+            this.layoutData = {
+                LayoutID: this.form.layout_id,
+                LayoutDescr: this.form.layoutOption,
+                DataList: data,
+                IsDeleted: true,
+            }
+
+            let layoutDataWrapper: any = { LayoutDetails: [this.layoutData] };
+            let layoutDataAsJSON = JSON.stringify(layoutDataWrapper);
             this.appService.saveLayoutList(layoutDataWrapper).subscribe((data) => {
                 console.log(AddedData);
             });
@@ -393,27 +405,31 @@ export class MyGridApplicationComponent {
     public ViewGrid(event) {
         if(this.path == "add"){
             this.isSaveDisabled = false;
-        }else{
-        if(this.path == "delete" || this.path == "export"){
-            this.isSaveDisabled = false;     
-        }else{
-            this.isSaveDisabled = true;
         }
-        if (event !== "default") {
-            this.isGridHidden = false;
-            this.rowData = event[0].DataList;
-            this.service.rowCount = this.rowData.length;
-            this.Standard_col_values = event[0].standard_col_values;
-            this.selectedLayout = event[0].LayoutDescr;
-            //this.declare_rowData();
-            //this.declare_standardColNames();
-            this.declare_colDefs();
-            if(this.path != "view"){
-                this.isButtonHidden = false;    
+        else {
+            if(this.path == "delete" || this.path == "export"){
+                this.isSaveDisabled = false;     
             }
-        } else {
-            this.isGridHidden = true;
+            else {
+                this.isSaveDisabled = true;
+            }
+
+            if (event !== "default") {
+                this.isGridHidden = false;
+                this.rowData = event[0].DataList;
+                this.service.rowCount = this.rowData.length;
+                this.Standard_col_values = event[0].standard_col_values;
+                this.selectedLayout = event[0].LayoutDescr;
+                //this.declare_rowData();
+                //this.declare_standardColNames();
+                this.declare_colDefs();
+                if(this.path != "view"){
+                    this.isButtonHidden = false;    
+                }
+            } else {
+                this.isButtonHidden = true;
+                this.isGridHidden = true;
+            }
         }
-    }
     }
 }
