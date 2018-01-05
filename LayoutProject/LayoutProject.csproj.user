@@ -4,6 +4,7 @@
     <UseIISExpress>true</UseIISExpress>
     <ProjectView>ProjectFiles</ProjectView>
     <ToolsVersionPromptShown>2.4</ToolsVersionPromptShown>
+    <WebStackScaffolding_ControllerDialogWidth>600</WebStackScaffolding_ControllerDialogWidth>
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>

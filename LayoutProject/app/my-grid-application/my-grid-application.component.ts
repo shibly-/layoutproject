@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { FormComponent } from '../my-form/Form.component';
 import { EmployeeService } from '../my-grid-application/my-grid-data.service';
 import { GridOptions, RowNode } from "ag-grid";
+import {Http, Headers, RequestOptions} from '@angular/http';
 
 import { DragDropObject, DRAG_DROP_SOURCE } from '../drag.drop.object';
 
@@ -34,7 +35,7 @@ export class MyGridApplicationComponent {
     layoutData : any;
     public selectedLayout: any = ''; 
 
-    constructor(private route: ActivatedRoute, private service: EmployeeService, private appService: AppService) {
+    constructor(private route: ActivatedRoute, private service: EmployeeService, private appService: AppService, private http: Http) {
         this.path = this.route.snapshot.url.join('/');
         this.formOptions();
         this.declare_standardColNames();
@@ -66,6 +67,9 @@ export class MyGridApplicationComponent {
             this.isButtonHidden = true;
             this.isGridHidden = true;
         }
+
+        //this.http.get('api/MongoDB/insertData')
+        //    .map((res: any) => res.json()).subscribe(); 
     }
 
     ngOnDestroy(){
