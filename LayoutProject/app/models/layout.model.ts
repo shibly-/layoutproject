@@ -1,4 +1,4 @@
 export class LayoutModel{
-    constructor(public layoutDescription,public layoutID){
+    constructor(public Layout_Description, public Layout_Id){
     }    
 }
