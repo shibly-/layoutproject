@@ -332,7 +332,7 @@ export class MyGridApplicationComponent {
     }
 
 
-    private onSaveClicked() {
+    private onSaveClicked() {        
         let AddedData;
         let data = this.gridOptions.rowData;
         if(this.path == "add"){
@@ -354,7 +354,13 @@ export class MyGridApplicationComponent {
                 });
             }
         }
-		else if(this.path == "export"){
+        else if (this.path == "export") {
+            for (let i in data) {
+                if (data[i].COL_NAME != "" && data[i].IMS_COLUMN_NAME == "New One Needed") {
+                    return false;
+                }
+            }
+
             this.layoutData = {
                 Layout_Id : this.form.layout_id,
                 Layout_Description : this.form.layoutOption,
@@ -376,6 +382,14 @@ export class MyGridApplicationComponent {
             a.remove();
         }
         else if (this.path == "edit") {
+
+            let _columnCount = 1;
+            if (data.length)
+                data.map(_ => {
+                    _["COL_ORDER"] = _columnCount++;
+                    return _;
+                });
+
             this.layoutData = {
                 Layout_Id: this.form.layout_id,
                 Layout_Description: this.form.layoutOption,
@@ -426,7 +440,7 @@ export class MyGridApplicationComponent {
             this.isSaveDisabled = false;
         }
         else {
-            if(this.path == "delete" || this.path == "export"){
+            if (this.path == "delete" || this.path == "clone" || this.path == "export") {
                 this.isSaveDisabled = false;     
             }
             else {
@@ -437,13 +451,21 @@ export class MyGridApplicationComponent {
                 this.isGridHidden = false;
                 this.rowData = event[0].Columns;
                 this.service.rowCount = this.rowData.length;
-                this.Standard_col_values = event[0].standard_col_values;
+                //this.Standard_col_values = event[0].standard_col_values;
                 this.selectedLayout = event[0].Layout_Description;
                 //this.declare_rowData();
                 //this.declare_standardColNames();
                 this.declare_colDefs();
                 if(this.path != "view"){
                     this.isButtonHidden = false;    
+                }
+                if ((this.path == "clone" || this.path == "export") && this.service.rowCount > 0) {
+                    let _columns = this.rowData;
+                    for (let i in _columns) {
+                        if (_columns[i].COL_NAME != "" && _columns[i].IMS_COLUMN_NAME == "New One Needed") {
+                            this.isSaveDisabled = true;
+                        }
+                    }
                 }
             } else {
                 this.isButtonHidden = true;
