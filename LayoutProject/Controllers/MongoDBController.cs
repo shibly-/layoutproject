@@ -122,7 +122,7 @@ namespace LayoutProject.Controllers
 
             var document = new BsonDocument
                 {
-                  { "Layout_id", LayoutDetails.Layout_Id },
+                  { "Layout_Id", LayoutDetails.Layout_Id },
                   { "Layout_Description", LayoutDetails.Layout_Description },
                   { "Columns", arr },
                   { "Active_Ind", true },
