@@ -53,11 +53,10 @@ export class AppService{
     }
 
     public addToList(data){
-        var jsonData = JSON.stringify(data);
-        console.log(jsonData);
+        //var jsonData = JSON.stringify(data);
         let headers=new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers});
-        return this.http.post('./app/assets/LayoutData.json',jsonData,options).map((res:any) => res.json());
+        return this.http.post('api/MongoDB/insertLayoutData', data,options).map((res:any) => res.json());
     }
     messageDialog(title: string, message: string, callback?: Function) {
         this.notifyAll({ key: 'messageDialog', value: { title: title, message: message, callback: callback } });

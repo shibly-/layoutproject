@@ -351,7 +351,6 @@ export class MyGridApplicationComponent {
                 }
                 this.appService.addToList(this.layoutData).subscribe((data) => {
                     AddedData = data;
-                    console.log(AddedData);
                 });
             }
         }

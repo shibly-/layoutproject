@@ -95,94 +95,44 @@ namespace LayoutProject.Controllers
             return null;
         }
 
-        // GET: MongoDB
-        [Route("loadData")]
-        [HttpGet]
-        public void LoadData()
-        {
-            var _database = connectionHelper();
-            if (_database == null)
-                return;
-
-            try
-            {
-                IMongoCollection<BsonDocument> _collection = _database.GetCollection<BsonDocument>("layoutconfiguration");
-
-                var documents = _collection.AsQueryable();
-
-                var data = _collection.Find(_ => true).ToListAsync();
-            }
-            catch (Exception ex)
-            {
-
-            }
-        }
-
-        [Route("insertData")]
-        [HttpGet]
-        public bool InsertData()
+        [Route("insertLayoutData")]
+        [HttpPost]
+        public bool InsertLayoutData([FromBody]Layout LayoutDetails)
         {
             var _database = connectionHelper();
             if (_database == null)
                 return false;
 
             var _collection = _database.GetCollection<BsonDocument>("layoutconfiguration");
+            
+            var arr = new BsonArray();
+            foreach (var ex in LayoutDetails.Columns)
+            {
+                var obj = new BsonDocument {
+                          { "COL_ID", ex.COL_ID },
+                          { "COL_ORDER", ex.COL_ORDER },
+                          { "COL_NAME", ex.COL_NAME },
+                          { "MANDATORY", ex.MANDATORY },
+                          { "IMS_COLUMN_NAME", ex.IMS_COLUMN_NAME },
+                          { "DATA_COLUMN_TYPE", ex.DATA_COLUMN_TYPE },
+                          { "UNIQUE_KEY", ex.UNIQUE_KEY }
+                };
+                arr.Add(obj);
+            }
 
             var document = new BsonDocument
                 {
-                  { "Layout_id", "1000" },
-                  { "Layout_Description", "Test Layout" },
-                  { "Columns", new BsonArray {
-                      new BsonDocument {
-                          { "COL_ID", 1 },
-                          { "COL_ORDER", 1 },
-                          { "COL_NAME", "Col1" },
-                          { "MANDATORY", true },
-                          { "IMS_COLUMN_NAME", "Col1" },
-                          { "DATA_COLUMN_TYPE", "string" },
-                          { "UNIQUE_KEY", false }
-                        }, new BsonDocument {
-                          { "COL_ID", 2 },
-                          { "COL_ORDER", 2 },
-                          { "COL_NAME", "Col2" },
-                          { "MANDATORY", false },
-                          { "IMS_COLUMN_NAME", "Col2" },
-                          { "DATA_COLUMN_TYPE", "string" },
-                          { "UNIQUE_KEY", false }
-                        }
-                    }
-                  },
+                  { "Layout_id", LayoutDetails.Layout_Id },
+                  { "Layout_Description", LayoutDetails.Layout_Description },
+                  { "Columns", arr },
                   { "Active_Ind", true },
                   { "Created_Date", DateTime.Now },
-                  { "Modified_Date", DateTime.Now }                 
+                  { "Modified_Date", DateTime.Now }
                 };
 
             try
             {
                 _collection.InsertOneAsync(document);
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
-            return true;
-        }
-
-        [Route("updateData")]
-        [HttpGet]
-        public bool UpdateData()
-        {
-            var _database = connectionHelper();
-            if (_database == null)
-                return false;
-
-            var _collection = _database.GetCollection<BsonDocument>("layoutconfiguration");
-
-            try
-            {
-                var updoneresult = _collection.UpdateOneAsync(
-                                    Builders<BsonDocument>.Filter.Eq("Layout_Id", 1000),
-                                    Builders<BsonDocument>.Update.Set("Layout_Description", "Test Description Updated"));
             }
             catch (Exception ex)
             {
