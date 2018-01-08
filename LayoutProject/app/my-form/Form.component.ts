@@ -60,8 +60,9 @@ export class FormComponent{
             this.haslayoutError = false;
             this.filteredData = this.appService.layoutdata.filter(element => element.Layout_Description === value);
             this.layout_id = this.filteredData[0].Layout_Id; 
-            if (!this.filteredData[0].IsDeleted)
+            if (this.filteredData[0].Active_Ind) {
                 this.onLayoutChange.emit(this.filteredData);
+            }                
             else {
                 this.haslayoutError = true;
                 this.hideLayoutMsg = false;
