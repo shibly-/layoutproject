@@ -381,9 +381,10 @@ export class MyGridApplicationComponent {
                 Layout_Id: this.form.layout_id,
                 Layout_Description: this.form.layoutOption,
                 Columns: data,
+                Active_Ind: true,
             }
 
-            let layoutDataWrapper: any = { LayoutDetails: [this.layoutData] };
+            let layoutDataWrapper: any = this.layoutData;
             let layoutDataAsJSON = JSON.stringify(layoutDataWrapper);
             this.appService.saveLayoutList(layoutDataWrapper).subscribe((data) => {
                 //console.log(AddedData);
@@ -394,13 +395,13 @@ export class MyGridApplicationComponent {
                 Layout_Id: this.form.layout_id,
                 Layout_Description: this.form.layoutOption,
                 Columns: data,
-                IsDeleted: true,
+                Active_Ind: false,
             }
 
-            let layoutDataWrapper: any = { LayoutDetails: [this.layoutData] };
+            let layoutDataWrapper: any = this.layoutData;
             let layoutDataAsJSON = JSON.stringify(layoutDataWrapper);
             this.appService.saveLayoutList(layoutDataWrapper).subscribe((data) => {
-                console.log(AddedData);
+                //console.log(AddedData);
             });
         }
 		else{
