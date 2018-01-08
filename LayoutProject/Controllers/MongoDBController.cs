@@ -190,6 +190,39 @@ namespace LayoutProject.Controllers
             }
             return true;
         }
+        
+        [Route("updateLayoutData")]
+        [HttpPost]
+        public bool updateLayoutData([FromBody]Layout LayoutDetails)
+        {
+            var _database = connectionHelper();
+            if (_database == null)
+                return false;
+
+            try
+            {
+                if (LayoutDetails.Layout_Id > 0)
+                {
+                    LayoutDetails.Columns.RemoveAll(x => String.IsNullOrWhiteSpace(x.COL_NAME));
+                    IMongoCollection<BsonDocument> _collection = _database.GetCollection<BsonDocument>("layoutconfiguration");                   
+                    var filter = Builders<BsonDocument>.Filter.Eq("Layout_Id", LayoutDetails.Layout_Id.ToString());
+                    var update = Builders<BsonDocument>.Update
+                        .Set("Layout_Description", LayoutDetails.Layout_Description)
+                        .Set("Columns", LayoutDetails.Columns)
+                        .Set("Active_Ind", LayoutDetails.Active_Ind)
+                        .CurrentDate("Modified_Date");
+
+                    var result = _collection.UpdateOne(filter, update);
+                    return true;
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return false;            
+        }
 
         [Route("deleteData")]
         [HttpGet]
