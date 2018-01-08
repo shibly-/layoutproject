@@ -67,7 +67,7 @@ namespace LayoutProject.Controllers
                 var layoutData = new List<Layout>();
                 foreach (var _data in data) {
                     var layout = new Layout();
-                    layout.Layout_Id = _data["Layout_Id"].ToInt32();
+                    layout.Layout_Id = _data["Layout_Id"].ToString();
                     layout.Layout_Description = _data["Layout_Description"].ToString();
 
                     var _columns = _data["Columns"].ToString();
@@ -151,7 +151,7 @@ namespace LayoutProject.Controllers
 
             try
             {
-                if (LayoutDetails.Layout_Id > 0)
+                if (!String.IsNullOrWhiteSpace(LayoutDetails.Layout_Id))
                 {
                     LayoutDetails.Columns.RemoveAll(x => String.IsNullOrWhiteSpace(x.COL_NAME));
                     IMongoCollection<BsonDocument> _collection = _database.GetCollection<BsonDocument>("layoutconfiguration");                   
@@ -215,7 +215,7 @@ namespace LayoutProject.Controllers
 
         public class Layout
         {
-            public int Layout_Id { get; set; }
+            public string Layout_Id { get; set; }
             public string Layout_Description { get; set; }
             public List<Columns> Columns { get; set; }
             public bool Active_Ind { get; set; }

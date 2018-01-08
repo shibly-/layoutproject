@@ -344,11 +344,35 @@ export class MyGridApplicationComponent {
                         this.onDeleteClicked(data[i]);
                     }
                 }
-                this.layoutData = {
-                    Layout_Id : this.form.layout_id,
-                    Layout_Description: this.form.Layout_Description,
-                    Columns : data,
+
+                for (let row of data) {
+                    let index = data.indexOf(row);
+                    if (index == data.length - 1) {
+                        break;
+                    }
+
+                    let list = data.slice(index + 1);
+                    for (let ex of list) {
+                        if (ex.COL_NAME == row.COL_NAME) {
+                            alert('Every column name should be different!!');
+                            return;
+                        }
+                    }
                 }
+                
+                let _columnCount = 1;
+                if (data.length)
+                    data.map(_ => {
+                        _["COL_ORDER"] = _columnCount++;
+                        return _;
+                    });
+
+                this.layoutData = {
+                    Layout_Id: this.form.layout_id,
+                    Layout_Description: this.form.Layout_Description,
+                    Columns: data,
+                }
+
                 this.appService.addToList(this.layoutData).subscribe((data) => {
                     AddedData = data;
                 });
