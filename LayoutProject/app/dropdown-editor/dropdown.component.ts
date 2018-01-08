@@ -1,13 +1,13 @@
 import { Component,ViewChild,AfterViewInit,ViewContainerRef } from '@angular/core';
 import {AgEditorComponent} from '../../node_modules/ag-grid-angular';
 
-
 @Component({
     selector: 'dropdown-cell',
     templateUrl: 'dropdown.html' 
 })
 export class EditorComponent implements AgEditorComponent, AfterViewInit {
-    private params:any;
+
+    private params: any;
     dropdownOptions:any=[];
 
     @ViewChild('container', {read: ViewContainerRef}) container;
@@ -37,5 +37,5 @@ export class EditorComponent implements AgEditorComponent, AfterViewInit {
     onKeyDown(event):void {
         console.log("In the key down event");
         console.log(event);
-        }
     }
+}

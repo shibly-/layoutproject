@@ -33,7 +33,7 @@ export class FormComponent{
         }
         this.appService.getList().subscribe(data => {
             let d = JSON.parse(data); 
-            this.appService.layoutdata = d.LayoutDetails;
+            this.appService.layoutdata = d;
         });
     }
 
@@ -58,14 +58,14 @@ export class FormComponent{
             this.onLayoutChange.emit(value);            
         }else{
             this.haslayoutError = false;
-            this.filteredData = this.appService.layoutdata.filter(element => element.LayoutDescr === value);
-            this.layout_id = this.filteredData[0].LayoutID; 
+            this.filteredData = this.appService.layoutdata.filter(element => element.Layout_Description === value);
+            this.layout_id = this.filteredData[0].Layout_Id; 
             if (!this.filteredData[0].IsDeleted)
                 this.onLayoutChange.emit(this.filteredData);
             else {
                 this.haslayoutError = true;
                 this.hideLayoutMsg = false;
-                this.layoutRelatedMsg = "The layout: \"" + this.filteredData[0].LayoutDescr  + "\" - is already deleted."
+                this.layoutRelatedMsg = "The layout: \"" + this.filteredData[0].Layout_Description  + "\" - is already deleted."
                 this.onLayoutChange.emit("default");
             }   
         }

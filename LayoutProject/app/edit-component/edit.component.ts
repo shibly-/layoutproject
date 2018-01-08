@@ -36,8 +36,12 @@ export class EditComponent {
     }
 
     ngOnInit(){
-        if(this.path == "add"){
-            let newRow = {col_num:this.rowCount+1,col_name:"",standard_col_name:"",data_type:"",mandatory_col:'',unique_key:''}
+        if (this.path == "add") {
+            // need to find the max ID
+            let newRow = {
+                COL_ID: 0, COL_ORDER: this.rowCount + 1, COL_NAME: "", IMS_COLUMN_NAME: "",
+                DATA_COLUMN_TYPE: "String", MANDATORY: false, UNIQUE_KEY: false
+            }
             this.gridOptions.rowData.push(newRow);
             this.rowCount++;
         }
@@ -50,15 +54,17 @@ export class EditComponent {
         this.gridOptions.api.selectAll();
     }
 
-    private declare_standardColNames(){
-        this.Standard_col_values = ["Employee Name",
-        "Employee_name",
-        "Emp_name",
-        "Emp_ID",
-        "Employee ID",
-        "Employee",
-        "Employee_ID",
-        "New One Needed"
+    private declare_standardColNames() {
+        // IMS_COLUMN_NAME, need to fetch data from Metadata DB
+        this.Standard_col_values = [
+            "Employee Name",
+            "Employee_name",
+            "Emp_name",
+            "Emp_ID",
+            "Employee ID",
+            "Employee",
+            "Employee_ID",
+            "New One Needed"
         ];
     }
 
@@ -69,17 +75,17 @@ export class EditComponent {
     private declare_colDefs(){
     this.columnDefs = [
         {   headerName : "Column Order",
-            field : "col_num",
+            field: "COL_ORDER",
             editable: false
             //cellEditorFramework : EditorComponent
          },
         {   headerName : "Column Name",
-            field : "col_name",
+            field: "COL_NAME",
             editable : this.decideEdit()
             //cellEditorFramework : EditorComponent
         },
         {   headerName : "Standard Column Name",
-            field : "standard_col_name",
+            field: "IMS_COLUMN_NAME",
             editable : this.decideEdit(),
             cellEditor: 'richSelect',
             cellEditorParams: {
@@ -88,7 +94,7 @@ export class EditComponent {
             }
         },
         {   headerName : "Data type",
-            field : "data_type",
+            field: "DATA_COLUMN_TYPE",
             editable : this.decideEdit(),
             cellEditor : 'richSelect',
             cellEditorParams : {
@@ -100,15 +106,16 @@ export class EditComponent {
             cellEditorParams : {
                 values : ['TRUE','FALSE']
             },
-            field : "mandatory_col",
+            field: "MANDATORY",
             editable : this.decideEdit()
         },
         {   headerName : "Unique Key",
-            field : "unique_key",
+            field: "UNIQUE_KEY",
             editable : this.decideEdit(),
             cellEditor : 'richSelect',
             cellEditorParams : {
-                values : ['TRUE','FALSE']
+                values: ['TRUE', 'FALSE'],
+                //values: [{ 'TRUE': true }, { 'FALSE': false }]
             }
         }        
         ];
@@ -125,21 +132,24 @@ export class EditComponent {
 
     private declare_rowData(){
         this.rowData = [
-            {col_num:this.rowCount,col_name:"EMPLOYEE NAME",standard_col_name:"EMP_NAME",data_type:"String",mandatory_col:'TRUE',unique_key:'FALSE'}
+            {
+                COL_ID: 0, COL_ORDER: this.rowCount, COL_NAME: "EMPLOYEE NAME", IMS_COLUMN_NAME: "EMP_NAME",
+                DATA_COLUMN_TYPE: "String", MANDATORY: false, UNIQUE_KEY: false
+            }
         ];
     }
 
     private declare_gridOptions(){
-        this.gridOptions = <GridOptions>{
+        this.gridOptions = <GridOptions> {
             enableColResize: true, 
             columnDefs : this.columnDefs,
             rowData : this.rowData,
             rowSelection: 'multiple'
-            };    
+        };    
     }
 
     private formOptions(){
-        this.SearchFormOptions = ['Layout Name','Layout Name 1','Layout Name 2','Layout Name 3'];
+        this.SearchFormOptions = ['Layout Name', 'Layout Name 1', 'Layout Name 2', 'Layout Name 3'];
     }
 
     private onRowClicked(event){
@@ -164,7 +174,8 @@ export class EditComponent {
     private onCellEditingStopped(event){
         let alldata = 0;
         let d = event.data
-        if(d.col_name != "" && d.unique_key !="" && d.mandatory_col !="" && d.standard_col_name!="" && d.col_num!="" && d.data_type!="" && this.path == "add"){
+        if (d.COL_NAME != "" && d.IMS_COLUMN_NAME != ""
+            && d.COL_ORDER != "" && d.DATA_COLUMN_TYPE != "" && this.path == "add") {
             this.onAddClicked();
             this.isSaveDisabled = false;
         } 
@@ -179,7 +190,10 @@ export class EditComponent {
     }
 
     private onAddClicked(){
-        var newItem = {col_num: this.rowCount+1,col_name:"",standard_col_name:"",data_type:"",mandatory_col:"",unique_key:""};
+        var newItem = {
+            COL_ID: 0, COL_ORDER: this.rowCount + 1, COL_NAME: "",
+            IMS_COLUMN_NAME: "", DATA_COLUMN_TYPE: "", MANDATORY: false, UNIQUE_KEY: false
+        };
         var res = this.gridOptions.api.updateRowData({add : [newItem]});
         this.rowData.push(newItem);
         this.rowCount++;
@@ -218,10 +232,10 @@ export class EditComponent {
             //this.isSaveDisabled = true;
         }else{
             for(let i in data){
-            if(data[i].col_name == "" || data[i].unique_key =="" || data[i].mandatory_col =="" || data[i].standard_col_name == "" || data[i].data_type == ""){
-                this.onDeleteClicked(data[i]);
+                if (data[i].COL_NAME == "" || data[i].IMS_COLUMN_NAME == "" || data[i].DATA_COLUMN_TYPE == "") {
+                    this.onDeleteClicked(data[i]);
+                }
             }
-        }
         } 
     }
 }

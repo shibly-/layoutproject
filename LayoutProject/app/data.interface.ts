@@ -1,5 +1,8 @@
 export interface DataSet{
-    LayoutID : number,
-    LayoutDescr : string,
-    DataList : any[]
+    Layout_Id : number,
+    Layout_Description : string,
+    Columns: any[],
+    Active_Ind: boolean,
+    Created_Date: string,
+    Modified_Date: string
 }

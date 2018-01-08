@@ -92,21 +92,26 @@ export class MyGridApplicationComponent {
         this.Datatype_values = this.service.getDatavalues();
     }
 
+    private _booleanValues = {
+        'true': 'TRUE',
+        'false': 'FALSE'
+    }
+
     private declare_colDefs() {
         this.columnDefs = [
             {
                 headerName: "Column Order",
-                field: "col_num",
+                field: "COL_ORDER",
                 editable: false
             },
             {
                 headerName: "Column Name",
-                field: "col_name",
+                field: "COL_NAME",
                 editable: this.decideEdit()
             },
             {
                 headerName: "Standard Column Name",
-                field: "standard_col_name",
+                field: "IMS_COLUMN_NAME",
                 editable: this.decideEdit(),
                 cellEditor: 'richSelect',
                 cellEditorParams: {
@@ -115,7 +120,7 @@ export class MyGridApplicationComponent {
             },
             {
                 headerName: "Data type",
-                field: "data_type",
+                field: "DATA_COLUMN_TYPE",
                 editable: this.decideEdit(),
                 cellEditor: 'richSelect',
                 cellEditorParams: {
@@ -128,16 +133,16 @@ export class MyGridApplicationComponent {
                 cellEditorParams: {
                     values: ['TRUE', 'FALSE']
                 },
-                field: "mandatory_col",
+                field: "MANDATORY",
                 editable: this.decideEdit()
             },
             {
                 headerName: "Unique Key",
-                field: "unique_key",
+                field: "UNIQUE_KEY",
                 editable: this.decideEdit(),
                 cellEditor: 'richSelect',
                 cellEditorParams: {
-                    values: ['TRUE', 'FALSE']
+                    values: ['TRUE', 'FALSE']                 
                 }
             }
         ];
@@ -154,14 +159,19 @@ export class MyGridApplicationComponent {
 
     private declare_rowData() {
         if (this.path != "add") {
-            //this.rowData = this.appService.getList().DataList;
+            //this.rowData = this.appService.getList().Columns;
             //this.service.rowCount = this.rowData.length;
             if(this.appService.data !== undefined){
-                this.rowData = this.appService.data[0].DataList;
+                this.rowData = this.appService.data[0].Columns;
                 this.service.rowCount = this.rowData.length;
             }
         } else {
-            this.rowData = [{ id: this.service.rowCount, col_num: this.service.rowCount, col_name: "", standard_col_name: "", data_type: "", mandatory_col: '', unique_key: '' }];
+            this.rowData = [{
+                // need to find the max ID
+                COL_ID: 0, COL_ORDER: this.service.rowCount,
+                COL_NAME: "", IMS_COLUMN_NAME: "", DATA_COLUMN_TYPE: "",
+                MANDATORY: false, UNIQUE_KEY: false
+            }];
         }
     }
 
@@ -244,21 +254,21 @@ export class MyGridApplicationComponent {
             if (event.dataTransfer) {
                 var evString = event.dataTransfer.getData("text");
                 var masterDrag: DragDropObject = JSON.parse(event.dataTransfer.getData("text"));
-                row_num = masterDrag.dragData[0].col_num;
+                row_num = masterDrag.dragData[0].COL_ORDER;
                 if (evString || evString.length > 0) {
                     if (event.target.offsetParent.attributes && event.target.offsetParent.attributes['row']) {
                         targetRowId = +event.target.offsetParent.attributes['row'].value;
                         let rowNode = this.gridOptions.api.getRowNode(targetRowId + 1);
                         targetData = rowNode.data;
                         rowNode.setData(masterDrag.dragData[0]);
-                        rowNode.setDataValue("col_num", targetData.col_num);
+                        rowNode.setDataValue("COL_ORDER", targetData.COL_ORDER);
                     }
 
                     this.infiniteLoopBlock = false;
                 }
 
                 selectedNodes[0].setData(targetData);
-                selectedNodes[0].setDataValue("col_num", row_num);
+                selectedNodes[0].setDataValue("COL_ORDER", row_num);
             }
         }
 
@@ -268,7 +278,7 @@ export class MyGridApplicationComponent {
         //this.SearchFormOptions = this.appService.getLayoutList();
         this.appService.getLayoutList().subscribe(data => {
             let d = JSON.parse(data); 
-            this.SearchFormOptions = d.LayoutList;
+            this.SearchFormOptions = d;
         });
     }
 
@@ -288,7 +298,8 @@ export class MyGridApplicationComponent {
     private onCellEditingStopped(event) {
         let alldata = 0;
         let d = event.data
-        if (d.col_num == this.gridOptions.rowData.length && d.col_name != "" && d.unique_key != "" && d.mandatory_col != "" && d.standard_col_name != "" && d.col_num != "" && d.data_type != "") {
+        if (d.COL_ORDER == this.gridOptions.rowData.length && d.COL_NAME != ""
+            && d.IMS_COLUMN_NAME != "" && d.COL_ORDER != "" && d.DATA_COLUMN_TYPE != "") {
             this.onAddClicked();
             this.isSaveDisabled = false;
         }
@@ -303,7 +314,11 @@ export class MyGridApplicationComponent {
     }
 
     private onAddClicked() {
-        var newItem = { id: this.service.rowCount + 1, col_num: this.service.rowCount + 1, col_name: "", standard_col_name: "", data_type: "", mandatory_col: "", unique_key: "" };
+        var newItem = {
+            // need to find the max ID
+            COL_ID: 0, COL_ORDER: this.service.rowCount + 1, COL_NAME: "",
+            IMS_COLUMN_NAME: "", DATA_COLUMN_TYPE: "", MANDATORY: false, UNIQUE_KEY: false
+        };
         var res = this.gridOptions.api.updateRowData({ add: [newItem] });
         this.rowData.push(newItem);
         this.service.rowCount++;
@@ -311,7 +326,7 @@ export class MyGridApplicationComponent {
 
     private onDeleteClicked(row) {
         let res = this.gridOptions.api.updateRowData({ remove: [row] });
-        let removedRowIndex = this.rowData.findIndex(r => r.col_num == row.col_num);
+        let removedRowIndex = this.rowData.findIndex(r => r.COL_ORDER == row.COL_ORDER);
         this.rowData.splice(removedRowIndex,1);
         this.rowCount--;
     }
@@ -321,18 +336,18 @@ export class MyGridApplicationComponent {
         let AddedData;
         let data = this.gridOptions.rowData;
         if(this.path == "add"){
-            if(!this.form.validateLayout(this.form.layoutDescription)){
+            if (!this.form.validateLayout(this.form.Layout_Description)){
                 this.isSaveDisabled = true;
             }else{
                 for (let i in data) {
-                    if (data[i].col_name == "" || data[i].unique_key == "" || data[i].mandatory_col == "" || data[i].standard_col_name == "" || data[i].data_type == "") {
+                    if (data[i].COL_NAME == "" || data[i].IMS_COLUMN_NAME == "" || data[i].DATA_COLUMN_TYPE == "") {
                         this.onDeleteClicked(data[i]);
                     }
                 }
                 this.layoutData = {
-                    LayoutID : this.form.layout_id,
-                    LayoutDescr : this.form.layoutDescription,
-                    DataList : data,
+                    Layout_Id : this.form.layout_id,
+                    Layout_Description: this.form.Layout_Description,
+                    Columns : data,
                 }
                 this.appService.addToList(this.layoutData).subscribe((data) => {
                     AddedData = data;
@@ -342,9 +357,9 @@ export class MyGridApplicationComponent {
         }
 		else if(this.path == "export"){
             this.layoutData = {
-                LayoutID : this.form.layout_id,
-                LayoutDescr : this.form.layoutOption,
-                DataList : data,
+                Layout_Id : this.form.layout_id,
+                Layout_Description : this.form.layoutOption,
+                Columns : data,
             }
             
             var layoutDataLabel = "LayoutDetails"; //this.form.layoutOption.toString();
@@ -363,9 +378,9 @@ export class MyGridApplicationComponent {
         }
         else if (this.path == "edit") {
             this.layoutData = {
-                LayoutID: this.form.layout_id,
-                LayoutDescr: this.form.layoutOption,
-                DataList: data,
+                Layout_Id: this.form.layout_id,
+                Layout_Description: this.form.layoutOption,
+                Columns: data,
             }
 
             let layoutDataWrapper: any = { LayoutDetails: [this.layoutData] };
@@ -376,9 +391,9 @@ export class MyGridApplicationComponent {
         }
         else if (this.path == "delete") {
             this.layoutData = {
-                LayoutID: this.form.layout_id,
-                LayoutDescr: this.form.layoutOption,
-                DataList: data,
+                Layout_Id: this.form.layout_id,
+                Layout_Description: this.form.layoutOption,
+                Columns: data,
                 IsDeleted: true,
             }
 
@@ -393,13 +408,13 @@ export class MyGridApplicationComponent {
 				this.form.validateLayoutDescr(this.form.layoutOption)
 			} else {
 				for (let i in data) {
-					if (data[i].col_name == "" || data[i].unique_key == "" || data[i].mandatory_col == "" || data[i].standard_col_name == "" || data[i].data_type == "") {
+                    if (data[i].COL_NAME == "" || data[i].IMS_COLUMN_NAME == "" || data[i].DATA_COLUMN_TYPE == "") {
 						this.onDeleteClicked(data[i]);
 					}
 				}
 				this.layoutData = {
-					LayoutId : this.form.layout_id,
-					LayoutDescr : this.form.layoutOption,
+                    Layout_Id : this.form.layout_id,
+					Layout_Description : this.form.layoutOption,
 					rowData : data,
 				}
 			}
@@ -420,10 +435,10 @@ export class MyGridApplicationComponent {
 
             if (event !== "default") {
                 this.isGridHidden = false;
-                this.rowData = event[0].DataList;
+                this.rowData = event[0].Columns;
                 this.service.rowCount = this.rowData.length;
                 this.Standard_col_values = event[0].standard_col_values;
-                this.selectedLayout = event[0].LayoutDescr;
+                this.selectedLayout = event[0].Layout_Description;
                 //this.declare_rowData();
                 //this.declare_standardColNames();
                 this.declare_colDefs();

@@ -28,19 +28,20 @@ export class AppService{
 
     public async setList(event){
         await this.getList().subscribe(data => {
-            this.dataList = data.LayoutDetails;
+            let d = JSON.parse(data); 
+            this.dataList = d;
         });
         this.data = this.dataList.filter(element => 
-            element.LayoutDescr === event);
+            element.Layout_Description === event);
     }
 
     public getList(): Observable<any> {        
-        return this.http.get('api/AggridData/getLayoutData')
+        return this.http.get('api/MongoDB/getLayoutData')
             .map((res:any) => res.json());
     }
     
     public getLayoutList(){
-        return this.http.get('api/AggridData/getLayoutList')
+        return this.http.get('api/MongoDB/getLayoutList')
             .map((res: any) => res.json()); 
     }
 
