@@ -383,6 +383,14 @@ export class MyGridApplicationComponent {
             a.remove();
         }
         else if (this.path == "edit") {
+
+            let _columnCount = 1;
+            if (data.length)
+                data.map(_ => {
+                    _["COL_ORDER"] = _columnCount++;
+                    return _;
+                });
+
             this.layoutData = {
                 Layout_Id: this.form.layout_id,
                 Layout_Description: this.form.layoutOption,
@@ -453,7 +461,7 @@ export class MyGridApplicationComponent {
                     this.isButtonHidden = false;    
                 }
                 if ((this.path == "clone" || this.path == "export") && this.service.rowCount > 0) {
-                    var _columns = this.rowData;
+                    let _columns = this.rowData;
                     for (let i in _columns) {
                         if (_columns[i].COL_NAME != "" && _columns[i].IMS_COLUMN_NAME == "New One Needed") {
                             this.isSaveDisabled = true;
