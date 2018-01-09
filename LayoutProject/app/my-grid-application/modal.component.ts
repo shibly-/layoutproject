@@ -1,6 +1,5 @@
 ﻿import { Component } from '@angular/core';
 
-
 @Component({
     selector: 'app-modal',
     template: `
@@ -49,4 +48,9 @@ export class ModalComponent {
             this.hide();
         }
     }
+}
+
+export enum MESSAGE_CONST {
+    SAVE_SUCCEED = "Data has been saved successfully.",
+    SAVE_FAILED = "Couldn\'t save the data!"
 }
