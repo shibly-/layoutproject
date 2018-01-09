@@ -7,7 +7,7 @@ import { GridOptions, RowNode } from "ag-grid";
 import {Http, Headers, RequestOptions} from '@angular/http';
 
 import { DragDropObject, DRAG_DROP_SOURCE } from '../drag.drop.object';
-import { ModalComponent } from './modal.component';
+import { ModalComponent, MESSAGE_CONST } from './modal.component';
 
 //import "ag-grid-enterprise";
 import { AppService } from "../app.service";
@@ -476,7 +476,7 @@ export class MyGridApplicationComponent {
             this.appService.saveLayoutList(layoutDataWrapper).subscribe((data) => {
                 if (data) {
                     this.isSaveDisabled = true;
-                    this.setNotificationModalContent('Message', 'Data has been saved successfully.');
+                    this.setNotificationModalContent('Notification', MESSAGE_CONST.SAVE_SUCCEED);
                     jQuery("#lpNotificationModalBtn").trigger('click');
                 }                
             });
@@ -562,7 +562,6 @@ export class MyGridApplicationComponent {
 
 
     // modal codes
-
     /*
     HOW to use:
         For Confirmation:
@@ -580,12 +579,6 @@ export class MyGridApplicationComponent {
     private cfModalBody: string = "Content";
     private nfModalTitle: string = "Title";
     private nfModalBody: string = "Content";
-    /*private modalMsg: any = {
-        'DataSaved': {
-            'Failed': 'Data has been saved successfully.',
-            'Succeed': 'Couldn\'t save the data!'
-        }
-    };*/
     
     public show(): void {
         this.visible = true;

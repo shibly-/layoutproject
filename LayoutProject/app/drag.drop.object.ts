@@ -5,7 +5,7 @@ export enum DRAG_DROP_SOURCE {
 }
 
 
-export class DragDropObject{
+export class DragDropObject {
     public windowId: string = "";
     public windowSource: DRAG_DROP_SOURCE = DRAG_DROP_SOURCE.NONE;
     public dragData: any;

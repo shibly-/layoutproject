@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {DataSet} from './data.interface';
+import { DataSet } from './data.interface';
 import {Observable, Subject} from 'rxjs/Rx';
 import { EmployeeService } from './my-grid-application/my-grid-data.service';
 import {Http,Headers, RequestOptions} from '@angular/http';
@@ -18,7 +18,7 @@ export class AppService{
     layoutdata : any[] = [];
     dataList : any[] = [];
     data: any;
-    activeMenu: string = ""; 
+    activeMenu: string = "";
 
     public notifier$: Subject<any>;
 
