@@ -334,19 +334,19 @@ export class MyGridApplicationComponent {
     }
 
 
-    private onSaveClicked() {        
+    private onSaveClicked() {
         let AddedData;
         let data = this.gridOptions.rowData;
-        if(this.path == "add"){
-            if (!this.form.validateLayout(this.form.Layout_Description)){
+        if (this.path == "add") {
+            if (!this.form.validateLayout(this.form.Layout_Description)) {
                 this.isSaveDisabled = true;
-            }else{
+            } else {
                 for (let i in data) {
                     if (data[i].COL_NAME == "" || data[i].IMS_COLUMN_NAME == "" || data[i].DATA_COLUMN_TYPE == "") {
                         this.onDeleteClicked(data[i]);
                     }
                 }
-
+                
                 for (let row of data) {
                     let index = data.indexOf(row);
                     if (index == data.length - 1) {
@@ -359,12 +359,18 @@ export class MyGridApplicationComponent {
                             alert('Every \'Attribute Name\' should be different!');
                             return;
                         }
+
+                        if (ex.IMS_COLUMN_NAME == row.IMS_COLUMN_NAME) {
+                            alert('Every \'Standard Attribute Name\' should be different!');
+                            return;
+                        }
                     }
                 }
-                
+
                 let _columnCount = 1;
                 if (data.length)
                     data.map(_ => {
+                        _["COL_ID"] = _columnCount;
                         _["COL_ORDER"] = _columnCount++;
                         return _;
                     });
@@ -376,6 +382,9 @@ export class MyGridApplicationComponent {
                 }
 
                 this.appService.addToList(this.layoutData).subscribe((data) => {
+                    if (data) {
+                        this.isSaveDisabled = true;
+                    }
                     AddedData = data;
                 });
             }
@@ -388,20 +397,20 @@ export class MyGridApplicationComponent {
             }
 
             this.layoutData = {
-                Layout_id : this.form.layout_id,
-                Layout_Description : this.form.layoutOption,
-                Columns : data,
+                Layout_id: this.form.layout_id,
+                Layout_Description: this.form.layoutOption,
+                Columns: data,
             }
-            
+
             var layoutDataLabel = "LayoutDetails"; //this.form.layoutOption.toString();
-            let layoutDataWrapper: any = { [layoutDataLabel] : this.layoutData };
+            let layoutDataWrapper: any = { [layoutDataLabel]: this.layoutData };
             let layoutDataAsJSON = JSON.stringify(layoutDataWrapper);
             let uri = "data:application/json;charset=UTF-8," + encodeURIComponent(layoutDataAsJSON);
-            
+
             let a = document.createElement('a');
             let url = "data:application/json;charset=UTF-8," + encodeURIComponent(layoutDataAsJSON);
             a.setAttribute("href", url);
-            a.setAttribute("download", ((this.form.layoutOption.toString()).split(' ').join('_').toLowerCase())+"_layout_details.json");
+            a.setAttribute("download", ((this.form.layoutOption.toString()).split(' ').join('_').toLowerCase()) + "_layout_details.json");
             var body = document.getElementsByTagName('body')[0];
             body.appendChild(a);
             a.click();
@@ -415,6 +424,26 @@ export class MyGridApplicationComponent {
                     _["COL_ORDER"] = _columnCount++;
                     return _;
                 });
+
+            for (let row of data) {
+                let index = data.indexOf(row);
+                if (index == data.length - 1) {
+                    break;
+                }
+
+                let list = data.slice(index + 1);
+                for (let ex of list) {
+                    if (ex.COL_NAME == row.COL_NAME) {
+                        alert('Every \'Attribute Name\' should be different!');
+                        return;
+                    }
+
+                    if (ex.IMS_COLUMN_NAME == row.IMS_COLUMN_NAME) {
+                        alert('Every \'Standard Attribute Name\' should be different!');
+                        return;
+                    }
+                }
+            }
 
             this.layoutData = {
                 Layout_id: this.form.layout_id,
@@ -443,22 +472,22 @@ export class MyGridApplicationComponent {
                 //console.log(AddedData);
             });
         }
-		else{
-			if (this.form.layoutOption == "default") {
-				this.form.validateLayoutDescr(this.form.layoutOption)
-			} else {
-				for (let i in data) {
+        else {
+            if (this.form.layoutOption == "default") {
+                this.form.validateLayoutDescr(this.form.layoutOption)
+            } else {
+                for (let i in data) {
                     if (data[i].COL_NAME == "" || data[i].IMS_COLUMN_NAME == "" || data[i].DATA_COLUMN_TYPE == "") {
-						this.onDeleteClicked(data[i]);
-					}
-				}
-				this.layoutData = {
-                    Layout_id : this.form.layout_id,
-					Layout_Description : this.form.layoutOption,
-					rowData : data,
-				}
-			}
-		}
+                        this.onDeleteClicked(data[i]);
+                    }
+                }
+                this.layoutData = {
+                    Layout_id: this.form.layout_id,
+                    Layout_Description: this.form.layoutOption,
+                    rowData: data,
+                }
+            }
+        }
     }
 
     public ViewGrid(event) {
