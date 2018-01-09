@@ -7,12 +7,12 @@ import { AppService } from "./app.service";
   styleUrls: ['./app/app.component.css']
 })
 export class AppComponent {
-    activeMenu: string = ""; 
-    constructor(private appService: AppService) {
-        this.activeMenu = this.appService.activeMenu; 
-    }
 
-    onMenuClicked(activeMenu: string) {
-        this.activeMenu = activeMenu;
+    private activeMenu: string = ""; 
+    setActiveMenu(_activeMenu: string) {
+        this.activeMenu = _activeMenu;
+    }
+    constructor(private appService: AppService) {
+        this.activeMenu = this.appService.activeMenu;
     }
 }

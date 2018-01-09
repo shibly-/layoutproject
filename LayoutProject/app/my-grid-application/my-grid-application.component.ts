@@ -7,9 +7,12 @@ import { GridOptions, RowNode } from "ag-grid";
 import {Http, Headers, RequestOptions} from '@angular/http';
 
 import { DragDropObject, DRAG_DROP_SOURCE } from '../drag.drop.object';
+import { ModalComponent } from './modal.component';
 
 //import "ag-grid-enterprise";
 import { AppService } from "../app.service";
+
+declare var jQuery: any;
 
 @Component({
     selector: 'app-my-grid-application',
@@ -35,9 +38,8 @@ export class MyGridApplicationComponent {
     layoutData : any;
     public selectedLayout: any = ''; 
 
-    @Output() onMenuClicked = new EventEmitter<string>();
-
-    constructor(private route: ActivatedRoute, private service: EmployeeService, private appService: AppService, private http: Http) {
+    constructor(private route: ActivatedRoute, private service: EmployeeService,
+        private appService: AppService, private http: Http) {
         this.appService.activeMenu = this.path = this.route.snapshot.url.join('/');
         this.formOptions();
         this.declare_standardColNames();
@@ -48,7 +50,6 @@ export class MyGridApplicationComponent {
         }
         this.declare_gridOptions();
         this.isSaveDisabled = true;
-        this.onMenuClicked.emit(this.appService.activeMenu);
     }
 
     ngOnInit() {
@@ -79,7 +80,7 @@ export class MyGridApplicationComponent {
     }
 
     onGridReady(params) {        
-        params.api.sizeColumnsToFit();
+        params.api.sizeColumnsToFit();        
     }
 
     selectAllRows() {
@@ -104,12 +105,14 @@ export class MyGridApplicationComponent {
             {
                 headerName: "Column Order",
                 field: "COL_ORDER",
-                editable: false
+                editable: false,
+                width: 125
             },
             {
                 headerName: "Attribute Name",
                 field: "COL_NAME",
-                editable: this.decideEdit()
+                editable: this.decideEdit(),
+                width: 325
             },
             {
                 headerName: "Standard Attribute Name",
@@ -118,7 +121,8 @@ export class MyGridApplicationComponent {
                 cellEditor: 'richSelect',
                 cellEditorParams: {
                     values: this.Standard_col_values,
-                }
+                },
+                width: 325
             },
             {
                 headerName: "Data type",
@@ -127,7 +131,8 @@ export class MyGridApplicationComponent {
                 cellEditor: 'richSelect',
                 cellEditorParams: {
                     values: this.Datatype_values
-                }
+                },
+                width: 100
             },
             {
                 headerName: "Required",
@@ -136,7 +141,8 @@ export class MyGridApplicationComponent {
                     values: ['TRUE', 'FALSE']
                 },
                 field: "MANDATORY",
-                editable: this.decideEdit()
+                editable: this.decideEdit(),
+                width: 100
             },
             {
                 headerName: "Unique Key",
@@ -145,7 +151,8 @@ export class MyGridApplicationComponent {
                 cellEditor: 'richSelect',
                 cellEditorParams: {
                     values: ['TRUE', 'FALSE']                 
-                }
+                },
+                width: 115
             }
         ];
     }
@@ -175,6 +182,7 @@ export class MyGridApplicationComponent {
                 MANDATORY: false, UNIQUE_KEY: false
             }];
         }
+        //this.gridOptions.api.sizeColumnsToFit();
     }
 
     private declare_gridOptions() {
@@ -468,7 +476,9 @@ export class MyGridApplicationComponent {
             this.appService.saveLayoutList(layoutDataWrapper).subscribe((data) => {
                 if (data) {
                     this.isSaveDisabled = true;
-                }
+                    this.setNotificationModalContent('Message', 'Data has been saved successfully.');
+                    jQuery("#lpNotificationModalBtn").trigger('click');
+                }                
             });
         }
         else if (this.path == "delete") {
@@ -548,5 +558,58 @@ export class MyGridApplicationComponent {
                 this.isGridHidden = true;
             }
         }
+    }
+
+
+    // modal codes
+
+    /*
+    HOW to use:
+        For Confirmation:
+        this.setConfirmationModalContent('Test1', 'Test2') or
+        jQuery("#lpConfirmationModalBtn").trigger('click')
+
+        For Alert:
+        this.setNotificationModalContent('Test1', 'Test2')
+        jQuery("#lpNotificationModalBtn").trigger('click') or
+    */
+
+    public visible = false;
+    public visibleAnimate = false;
+    private cfModalTitle: string = "Title";
+    private cfModalBody: string = "Content";
+    private nfModalTitle: string = "Title";
+    private nfModalBody: string = "Content";
+    /*private modalMsg: any = {
+        'DataSaved': {
+            'Failed': 'Data has been saved successfully.',
+            'Succeed': 'Couldn\'t save the data!'
+        }
+    };*/
+    
+    public show(): void {
+        this.visible = true;
+        setTimeout(() => this.visibleAnimate = true, 100);
+    }
+
+    public hide(): void {
+        this.visibleAnimate = false;
+        setTimeout(() => this.visible = false, 300);
+    }
+
+    public onContainerClicked(event: MouseEvent): void {
+        if ((<HTMLElement>event.target).classList.contains('modal')) {
+            this.hide();
+        }
+    }
+
+    public setConfirmationModalContent(_title: string, _bodyContent: string) {
+        this.cfModalTitle = _title;
+        this.cfModalBody = _bodyContent;
+    }
+
+    public setNotificationModalContent(_title: string, _bodyContent: string) {
+        this.nfModalTitle = _title;
+        this.nfModalBody = _bodyContent;
     }
 }

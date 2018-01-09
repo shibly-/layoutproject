@@ -4,7 +4,8 @@ import {FormsModule} from '@angular/forms';
 import {AgGridModule} from "ag-grid-angular/main";
 import {AppComponent} from "./app.component";
 import { RouterModule,Routes } from '@angular/router';
-import {MyGridApplicationComponent} from "./my-grid-application/my-grid-application.component";
+import { MyGridApplicationComponent } from "./my-grid-application/my-grid-application.component";
+import { ModalComponent } from './my-grid-application/modal.component';
 import {FormComponent} from "./my-form/Form.component";
 import {EditorComponent} from "./my-editor/editor.component";
 import {EmployeeService} from './my-grid-application/my-grid-data.service';
@@ -23,7 +24,8 @@ const routes : Routes = [
 @NgModule({
     declarations: [
         AppComponent,
-        MyGridApplicationComponent,        
+        MyGridApplicationComponent,   
+        ModalComponent,     
         FormComponent,
         EditorComponent
     ],
@@ -36,7 +38,7 @@ const routes : Routes = [
         ),
         RouterModule.forRoot(routes)
     ],
-    providers: [EmployeeService,AppService],
+    providers: [EmployeeService, AppService],
     bootstrap: [AppComponent]
 })
 export class AppModule {

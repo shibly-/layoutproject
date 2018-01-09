@@ -28,3 +28,7 @@ textarea {
         width: 1370px;
     }
 }
+
+.aggrid-content {
+    min-height: 300px;
+}
