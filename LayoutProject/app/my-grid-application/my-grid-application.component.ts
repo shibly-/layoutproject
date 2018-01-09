@@ -105,12 +105,12 @@ export class MyGridApplicationComponent {
                 editable: false
             },
             {
-                headerName: "Column Name",
+                headerName: "Attribute Name",
                 field: "COL_NAME",
                 editable: this.decideEdit()
             },
             {
-                headerName: "Standard Column Name",
+                headerName: "Standard Attribute Name",
                 field: "IMS_COLUMN_NAME",
                 editable: this.decideEdit(),
                 cellEditor: 'richSelect',
@@ -128,7 +128,7 @@ export class MyGridApplicationComponent {
                 }
             },
             {
-                headerName: "Mandatory Column",
+                headerName: "Required",
                 cellEditor: 'richSelect',
                 cellEditorParams: {
                     values: ['TRUE', 'FALSE']
@@ -354,7 +354,7 @@ export class MyGridApplicationComponent {
                     let list = data.slice(index + 1);
                     for (let ex of list) {
                         if (ex.COL_NAME == row.COL_NAME) {
-                            alert('Every column name should be different!!');
+                            alert('Every \'Attribute Name\' should be different!');
                             return;
                         }
                     }
@@ -368,7 +368,7 @@ export class MyGridApplicationComponent {
                     });
 
                 this.layoutData = {
-                    Layout_Id: this.form.layout_id,
+                    Layout_id: this.form.layout_id,
                     Layout_Description: this.form.Layout_Description,
                     Columns: data,
                 }
@@ -386,7 +386,7 @@ export class MyGridApplicationComponent {
             }
 
             this.layoutData = {
-                Layout_Id : this.form.layout_id,
+                Layout_id : this.form.layout_id,
                 Layout_Description : this.form.layoutOption,
                 Columns : data,
             }
@@ -415,7 +415,7 @@ export class MyGridApplicationComponent {
                 });
 
             this.layoutData = {
-                Layout_Id: this.form.layout_id,
+                Layout_id: this.form.layout_id,
                 Layout_Description: this.form.layoutOption,
                 Columns: data,
                 Active_Ind: true,
@@ -429,7 +429,7 @@ export class MyGridApplicationComponent {
         }
         else if (this.path == "delete") {
             this.layoutData = {
-                Layout_Id: this.form.layout_id,
+                Layout_id: this.form.layout_id,
                 Layout_Description: this.form.layoutOption,
                 Columns: data,
                 Active_Ind: false,
@@ -451,7 +451,7 @@ export class MyGridApplicationComponent {
 					}
 				}
 				this.layoutData = {
-                    Layout_Id : this.form.layout_id,
+                    Layout_id : this.form.layout_id,
 					Layout_Description : this.form.layoutOption,
 					rowData : data,
 				}

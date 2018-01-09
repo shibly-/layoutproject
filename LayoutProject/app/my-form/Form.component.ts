@@ -59,7 +59,7 @@ export class FormComponent{
         }else{
             this.haslayoutError = false;
             this.filteredData = this.appService.layoutdata.filter(element => element.Layout_Description === value);
-            this.layout_id = this.filteredData[0].Layout_Id; 
+            this.layout_id = this.filteredData[0].Layout_id; 
             if (this.filteredData[0].Active_Ind) {
                 this.onLayoutChange.emit(this.filteredData);
             }                
