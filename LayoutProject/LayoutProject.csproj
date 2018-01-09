@@ -168,7 +168,6 @@
   <ItemGroup>
     <Content Include="app\app.component.css" />
     <Content Include="app\app.component.html" />
-    <Content Include="app\custom-modal\modal-customclass.html" />
     <Content Include="app\dropdown-editor\dropdown.html" />
     <Content Include="app\edit-component\edit.html" />
     <Content Include="app\my-form\Form.html" />
@@ -245,10 +244,8 @@
     <TypeScriptCompile Include="app\environments\environment.ts" />
     <TypeScriptCompile Include="app\main.ts" />
     <TypeScriptCompile Include="app\models\layout.model.ts" />
-    <TypeScriptCompile Include="app\custom-modal\modal-customclass.component.ts" />
     <TypeScriptCompile Include="app\my-editor\editor.component.ts" />
     <TypeScriptCompile Include="app\my-form\Form.component.ts" />
-    <TypeScriptCompile Include="app\my-grid-application\modal.component.ts" />
     <TypeScriptCompile Include="app\my-grid-application\my-grid-application.component.spec.ts" />
     <TypeScriptCompile Include="app\my-grid-application\my-grid-application.component.ts" />
     <TypeScriptCompile Include="app\my-grid-application\my-grid-data.service.ts" />

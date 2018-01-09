@@ -478,7 +478,10 @@ export class MyGridApplicationComponent {
                     this.isSaveDisabled = true;
                     this.setNotificationModalContent('Notification', MESSAGE_CONST.SAVE_SUCCEED);
                     jQuery("#lpNotificationModalBtn").trigger('click');
-                }                
+                } else {
+                    this.setNotificationModalContent('Notification', MESSAGE_CONST.SAVE_FAILED);
+                    jQuery("#lpNotificationModalBtn").trigger('click');
+                }             
             });
         }
         else if (this.path == "delete") {
