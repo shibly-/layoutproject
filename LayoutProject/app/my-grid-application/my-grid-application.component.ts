@@ -278,9 +278,15 @@ export class MyGridApplicationComponent {
 
     private formOptions() {
         //this.SearchFormOptions = this.appService.getLayoutList();
+        if (this.appService.LayoutList.length) {
+            this.SearchFormOptions = this.appService.LayoutList;
+            return;
+        }
+
         this.appService.getLayoutList().subscribe(data => {
             let d = JSON.parse(data); 
             this.SearchFormOptions = d;
+            this.appService.LayoutList = d;
         });
     }
 
@@ -379,11 +385,16 @@ export class MyGridApplicationComponent {
                     Layout_id: this.form.layout_id,
                     Layout_Description: this.form.Layout_Description,
                     Columns: data,
+                    Active_Ind: true
                 }
 
                 this.appService.addToList(this.layoutData).subscribe((data) => {
                     if (data) {
                         this.isSaveDisabled = true;
+                        if (this.appService.LayoutList.length) {
+                            this.appService.LayoutList.push(this.layoutData.Layout_Description);
+                            this.appService.layoutdata.push(this.layoutData);
+                        }
                     }
                     AddedData = data;
                 });
@@ -455,7 +466,9 @@ export class MyGridApplicationComponent {
             let layoutDataWrapper: any = this.layoutData;
             let layoutDataAsJSON = JSON.stringify(layoutDataWrapper);
             this.appService.saveLayoutList(layoutDataWrapper).subscribe((data) => {
-                //console.log(AddedData);
+                if (data) {
+                    this.isSaveDisabled = true;
+                }
             });
         }
         else if (this.path == "delete") {
@@ -469,7 +482,15 @@ export class MyGridApplicationComponent {
             let layoutDataWrapper: any = this.layoutData;
             let layoutDataAsJSON = JSON.stringify(layoutDataWrapper);
             this.appService.saveLayoutList(layoutDataWrapper).subscribe((data) => {
-                //console.log(AddedData);
+                if (data) {
+                    this.isGridHidden = true;
+                    this.isButtonHidden = true;
+                    for (let ex of this.appService.layoutdata) {
+                        if (ex.Layout_id == this.layoutData.Layout_id) {
+                            ex.Active_Ind = false;
+                        }
+                    }
+                }
             });
         }
         else {

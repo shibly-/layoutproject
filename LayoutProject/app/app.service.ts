@@ -24,7 +24,7 @@ export class AppService{
 
     constructor(private gridService : EmployeeService,private http: Http){
         this.notifier$ = new Subject();
-        this.LayoutList = ['Employee Details', 'Student Details', 'Order Details'];        
+        this.LayoutList = [];        
     }
 
     public async setList(event){
