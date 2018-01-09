@@ -35,8 +35,10 @@ export class MyGridApplicationComponent {
     layoutData : any;
     public selectedLayout: any = ''; 
 
+    @Output() onMenuClicked = new EventEmitter<string>();
+
     constructor(private route: ActivatedRoute, private service: EmployeeService, private appService: AppService, private http: Http) {
-        this.path = this.route.snapshot.url.join('/');
+        this.appService.activeMenu = this.path = this.route.snapshot.url.join('/');
         this.formOptions();
         this.declare_standardColNames();
         this.declare_dataTypes();
@@ -46,6 +48,7 @@ export class MyGridApplicationComponent {
         }
         this.declare_gridOptions();
         this.isSaveDisabled = true;
+        this.onMenuClicked.emit(this.appService.activeMenu);
     }
 
     ngOnInit() {
@@ -68,8 +71,7 @@ export class MyGridApplicationComponent {
             this.isGridHidden = true;
         }
 
-        //this.http.get('api/MongoDB/insertData')
-        //    .map((res: any) => res.json()).subscribe(); 
+        //jQuery
     }
 
     ngOnDestroy(){

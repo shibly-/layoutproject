@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AppService } from "./app.service";
 
 @Component({
   selector: 'app-root',
@@ -6,4 +7,12 @@ import { Component } from '@angular/core';
   styleUrls: ['./app/app.component.css']
 })
 export class AppComponent {
+    activeMenu: string = ""; 
+    constructor(private appService: AppService) {
+        this.activeMenu = this.appService.activeMenu; 
+    }
+
+    onMenuClicked(activeMenu: string) {
+        this.activeMenu = activeMenu;
+    }
 }

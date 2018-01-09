@@ -17,7 +17,8 @@ export class AppService{
     LayoutList : any[];
     layoutdata : any[] = [];
     dataList : any[] = [];
-    data : any;
+    data: any;
+    activeMenu: string = ""; 
 
     public notifier$: Subject<any>;
 
