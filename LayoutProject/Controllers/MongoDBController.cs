@@ -67,7 +67,7 @@ namespace LayoutProject.Controllers
                 var layoutData = new List<Layout>();
                 foreach (var _data in data) {
                     var layout = new Layout();
-                    layout.Layout_Id = _data["Layout_Id"].ToString();
+                    layout.Layout_id = _data["Layout_id"].ToString();
                     layout.Layout_Description = _data["Layout_Description"].ToString();
 
                     var _columns = _data["Columns"].ToString();
@@ -122,7 +122,7 @@ namespace LayoutProject.Controllers
 
             var document = new BsonDocument
                 {
-                  { "Layout_Id", LayoutDetails.Layout_Id },
+                  { "Layout_id", LayoutDetails.Layout_id },
                   { "Layout_Description", LayoutDetails.Layout_Description },
                   { "Columns", arr },
                   { "Active_Ind", true },
@@ -151,11 +151,11 @@ namespace LayoutProject.Controllers
 
             try
             {
-                if (!String.IsNullOrWhiteSpace(LayoutDetails.Layout_Id))
+                if (!String.IsNullOrWhiteSpace(LayoutDetails.Layout_id))
                 {
                     LayoutDetails.Columns.RemoveAll(x => String.IsNullOrWhiteSpace(x.COL_NAME));
                     IMongoCollection<BsonDocument> _collection = _database.GetCollection<BsonDocument>("layoutconfiguration");                   
-                    var filter = Builders<BsonDocument>.Filter.Eq("Layout_Id", LayoutDetails.Layout_Id.ToString());
+                    var filter = Builders<BsonDocument>.Filter.Eq("Layout_id", LayoutDetails.Layout_id.ToString());
                     var update = Builders<BsonDocument>.Update
                         .Set("Layout_Description", LayoutDetails.Layout_Description)
                         .Set("Columns", LayoutDetails.Columns)
@@ -184,7 +184,7 @@ namespace LayoutProject.Controllers
 
             var _collection = _database.GetCollection<BsonDocument>("layoutconfiguration");
 
-            var filter = Builders<BsonDocument>.Filter.Eq("Layout_Id", 1000);
+            var filter = Builders<BsonDocument>.Filter.Eq("Layout_id", 1000);
 
             try
             {
@@ -215,7 +215,7 @@ namespace LayoutProject.Controllers
 
         public class Layout
         {
-            public string Layout_Id { get; set; }
+            public string Layout_id { get; set; }
             public string Layout_Description { get; set; }
             public List<Columns> Columns { get; set; }
             public bool Active_Ind { get; set; }

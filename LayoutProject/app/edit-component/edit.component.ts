@@ -79,12 +79,14 @@ export class EditComponent {
             editable: false
             //cellEditorFramework : EditorComponent
          },
-        {   headerName : "Column Name",
+        {
+            headerName: "Attribute Name",
             field: "COL_NAME",
             editable : this.decideEdit()
             //cellEditorFramework : EditorComponent
         },
-        {   headerName : "Standard Column Name",
+        {
+            headerName: "Standard Attribute Name",
             field: "IMS_COLUMN_NAME",
             editable : this.decideEdit(),
             cellEditor: 'richSelect',
@@ -101,7 +103,8 @@ export class EditComponent {
                 values : this.Datatype_values
             }
         },
-        {   headerName : "Mandatory Column",
+        {
+            headerName: "Required",
             cellEditor : 'richSelect',
             cellEditorParams : {
                 values : ['TRUE','FALSE']
@@ -158,7 +161,7 @@ export class EditComponent {
 
     private onCellClicked(event){
         //console.log(event);
-        /*if(event.colDef.headerName == 'Column Name' && (event.data.col_name !== "")){
+        /*if(event.colDef.headerName == 'Attribute Name' && (event.data.col_name !== "")){
             this.onAddClicked();
             this.isSaveDisabled = false;
         } */
