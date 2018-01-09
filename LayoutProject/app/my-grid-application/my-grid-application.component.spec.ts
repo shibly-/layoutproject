@@ -1,7 +1,8 @@
 import {async, ComponentFixture, TestBed} from "@angular/core/testing";
 
 import {AppComponent} from "../app.component";
-import {MyGridApplicationComponent} from "./my-grid-application.component";
+import { MyGridApplicationComponent } from "./my-grid-application.component";
+import { ModalComponent } from './modal.component';
 import {AgGridModule} from "ag-grid-angular";
 
 describe('MyGridApplicationComponent', () => {
@@ -16,7 +17,7 @@ describe('MyGridApplicationComponent', () => {
                 )
             ],
             declarations: [
-                AppComponent, MyGridApplicationComponent
+                AppComponent, MyGridApplicationComponent, ModalComponent
             ],
         })
             .compileComponents();

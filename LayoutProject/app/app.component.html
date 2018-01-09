@@ -1,16 +1,16 @@
 <header>
     <nav class="navbar navbar-default" role="navigation">
         <ul class="nav navbar-nav">
-            <li [ngClass]="{'active': activeMenu=='add'}" role="presentation"><a routerLink="/add">ADD</a></li>
-            <li [ngClass]="{'active': activeMenu=='edit'}" role="presentation"><a routerLink="/edit">EDIT</a></li>
-            <li [ngClass]="{'active': activeMenu=='view'}" role="presentation"><a routerLink="/view">VIEW</a></li>
-            <li [ngClass]="{'active': activeMenu=='delete'}" role="presentation"><a routerLink="/delete">DELETE</a></li>
-            <li [ngClass]="{'active': activeMenu=='clone'}" role="presentation"><a routerLink="/clone">CLONE</a></li>
-            <li [ngClass]="{'active': activeMenu=='export'}" role="presentation"><a routerLink="/export">EXPORT</a></li>
+            <li [class.active]="activeMenu=='add'" role="presentation"><a (click)="setActiveMenu('add')" routerLink="/add">ADD</a></li>
+            <li [class.active]="activeMenu=='edit'" role="presentation"><a (click)="setActiveMenu('edit')" routerLink="/edit">EDIT</a></li>
+            <li [class.active]="activeMenu=='view'" role="presentation"><a (click)="setActiveMenu('view')" routerLink="/view">VIEW</a></li>
+            <li [class.active]="activeMenu=='delete'" role="presentation"><a (click)="setActiveMenu('delete')" routerLink="/delete">DELETE</a></li>
+            <li [class.active]="activeMenu=='clone'" role="presentation"><a (click)="setActiveMenu('clone')" routerLink="/clone">CLONE</a></li>
+            <li [class.active]="activeMenu=='export'" role="presentation"><a (click)="setActiveMenu('export')" routerLink="/export">EXPORT</a></li>
         </ul>
     </nav>
 </header>
-<content>
+<content class="aggrid-content">
     <router-outlet></router-outlet>
 </content>
 
