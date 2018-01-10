@@ -650,13 +650,14 @@ export class MyGridApplicationComponent {
             --this.appService.maxLayoutID;
         } else if (this.path == "edit") {
             //this.gridOptions.api.setRowData(this.rowDataCopy);
-            this.rowData = Object.assign([], this.appService.rowDataCopy);
+            //this.rowData = Object.assign([], this.appService.rowDataCopy);
 
             this.rowData = [];
             for (let dt of this.appService.rowDataCopy) {
                 let obj = Object.assign(Object.create(Object.getPrototypeOf(dt)), dt);
                 this.rowData.push(obj);
             }
+            this.service.rowCount = this.rowData.length;
         }
     }
 
@@ -708,23 +709,6 @@ export class MyGridApplicationComponent {
             }
         }
     }
-
-    /*private validateLayout(event) {
-        this.layout_id = this.appService.layoutdata.length + 1;
-        console.log(event);
-    }*/
-
-    // modal codes
-    /*
-    HOW to use:
-        For Confirmation:
-        this.setConfirmationModalContent('Test1', 'Test2') or
-        jQuery("#lpConfirmationModalBtn").trigger('click')
-
-        For Alert:
-        this.setNotificationModalContent('Test1', 'Test2')
-        jQuery("#lpNotificationModalBtn").trigger('click') or
-    */
 
     public visible = false;
     public visibleAnimate = false;

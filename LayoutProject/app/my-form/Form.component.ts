@@ -55,7 +55,7 @@ export class FormComponent{
         }else{
             flag = true;
             this.haslayoutError = false;
-            this.layout_id = ++this.appService.maxLayoutID;//this.appService.layoutdata.length + 1;
+            this.layout_id = ++this.appService.maxLayoutID;
             this.onLayoutChange.emit(value);
         }
         return flag;
