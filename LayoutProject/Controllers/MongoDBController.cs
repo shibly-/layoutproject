@@ -213,6 +213,56 @@ namespace LayoutProject.Controllers
             }
         }
 
+        [Route("getSTDColumnList")]
+        [HttpGet]
+        public string getSTDColumnList()
+        {
+            var _database = refDBConnectionHelper(refConnection, metadataDB);
+            if (_database == null)
+                return null;
+
+            try
+            {
+                IMongoCollection<BsonDocument> _collection = _database.GetCollection<BsonDocument>("ImsStandardColumns");
+                var filter = Builders<BsonDocument>.Filter.Eq("Actv_ind", "TRUE");
+                var projection = Builders<BsonDocument>.Projection.Include("imsColumnName").Exclude("_id");
+
+                var data = _collection.Find<BsonDocument>(filter).Project(projection).ToList();
+                var _colNames = data.Select(x => x["imsColumnName"].ToString()).ToList();
+
+                return JsonConvert.SerializeObject(_colNames, Formatting.Indented,
+                            new JsonSerializerSettings
+                            {
+                                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                            });
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return null;
+        }
+
+        private string refConnection = "ReferenceDBMS";
+        private string metadataDB = "metadata";
+        private string referenceDB = "reference";
+
+        public IMongoDatabase refDBConnectionHelper(string RefConnectionName, string DBName)
+        {
+            try
+            {
+                string constring = ConfigurationManager.ConnectionStrings[RefConnectionName].ConnectionString;
+                IMongoClient _client = new MongoClient(constring);
+
+                IMongoDatabase _database = _client.GetDatabase(DBName);
+                return _database;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
         public class Layout
         {
             public string Layout_id { get; set; }
