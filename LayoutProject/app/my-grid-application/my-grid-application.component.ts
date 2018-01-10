@@ -1,10 +1,10 @@
-import { Component, Output, EventEmitter, ViewChild } from "@angular/core";
+import { Component, Output, EventEmitter, ViewChild, ViewEncapsulation } from "@angular/core";
 import { EditorComponent } from "../my-editor/editor.component";
 import { ActivatedRoute } from '@angular/router';
 import { FormComponent } from '../my-form/Form.component';
 import { EmployeeService } from '../my-grid-application/my-grid-data.service';
 import { GridOptions, RowNode } from "ag-grid";
-import {Http, Headers, RequestOptions} from '@angular/http';
+import { Http, Headers, RequestOptions } from '@angular/http';
 
 import { DragDropObject, DRAG_DROP_SOURCE } from '../drag.drop.object';
 import { ModalComponent, MESSAGE_CONST } from './modal.component';
@@ -16,7 +16,9 @@ declare var jQuery: any;
 
 @Component({
     selector: 'app-my-grid-application',
-    templateUrl: './app/my-grid-application/my-grid-application.component.html'
+    templateUrl: './app/my-grid-application/my-grid-application.component.html',
+    styleUrls: ['./app/my-grid-application/my-grid-application.component.css'],
+    encapsulation: ViewEncapsulation.None,
 })
 export class MyGridApplicationComponent {
     @ViewChild(FormComponent) form;
@@ -43,6 +45,9 @@ export class MyGridApplicationComponent {
     layout_id: number;
     layoutDescription: string;
 
+    clone_layout_id: number;
+    clone_layout_desc: string;
+
     constructor(private route: ActivatedRoute, private service: EmployeeService, private appService: AppService, private http: Http) {
         this.appService.activeMenu = this.path = this.route.snapshot.url.join('/');
         this.formOptions();
@@ -68,7 +73,7 @@ export class MyGridApplicationComponent {
             this.isGridHidden = true;
             this.isButtonHidden = true;
         } else if (this.path == "delete") {
-            this.buttonTitle = "Delete";
+            this.buttonTitle = "Delete";            
         } else if (this.path == "export") {
             this.buttonTitle = "Export";
         } else if (this.path == "clone") {
@@ -77,8 +82,6 @@ export class MyGridApplicationComponent {
             this.isButtonHidden = true;
             this.isGridHidden = true;
         }
-
-        //jQuery
     }
 
     ngOnDestroy(){
@@ -538,15 +541,54 @@ export class MyGridApplicationComponent {
                     this.setNotificationModalContent('Notification', MESSAGE_CONST.SAVE_FAILED);
                     jQuery("#lpNotificationModalBtn").trigger('click');
                 } 
-            });
+            });            
         }
         else if (this.path == 'clone') {
-            this.isCloneHidden = false;
-            //this.form.isAddRowhidden = false;
-            //this.form.layout_id = "";
-            this.decideEdit();
-            this.isSaveDisabled = true;
+            if (this.clone_layout_desc.trim() == "") {
+                this.setNotificationModalContent('Notification', "Please enter the layout description.");
+                jQuery("#lpNotificationModalBtn").trigger('click');
+                return false;
+            }
 
+            // do clone
+            for (let i in data) {
+                if (data[i].COL_NAME == "" || data[i].IMS_COLUMN_NAME == "" || data[i].DATA_COLUMN_TYPE == "") {
+                    this.onDeleteClicked(data[i]);
+                }
+            }
+            
+            this.layoutData = {
+                Layout_id: this.clone_layout_id,
+                Layout_Description: this.clone_layout_desc,
+                Columns: data,
+                Active_Ind: true
+            }
+
+            this.isCloneHidden = true;
+            this.isSaveDisabled = true;
+            this.appService.addToList(this.layoutData).subscribe((data) => {
+                if (data) {
+                    this.setNotificationModalContent('Notification', MESSAGE_CONST.SAVE_SUCCEED);
+                    jQuery("#lpNotificationModalBtn").trigger('click');
+
+                    this.isSaveDisabled = true;
+                    if (this.appService.LayoutList.length) {
+                        this.appService.LayoutList.push(this.layoutData.Layout_Description);
+                        this.appService.layoutdata.push(this.layoutData);
+                    }
+
+                    this.isCloneHidden = true;
+                    this.clone_layout_desc = "";
+                    this.clone_layout_id = this.appService.maxLayoutID + 1;
+                    this.isGridHidden = true;
+                    this.isButtonHidden = true;
+
+                } else {
+                    this.isCloneHidden = false;
+                    this.setNotificationModalContent('Notification', MESSAGE_CONST.SAVE_FAILED);
+                    jQuery("#lpNotificationModalBtn").trigger('click');
+                }
+            });
         }
         else {
             if (this.form.layoutOption == "default") {
@@ -601,13 +643,20 @@ export class MyGridApplicationComponent {
                 }
                 if ((this.path == "clone" || this.path == "export") && this.service.rowCount > 0) {
                     let _columns = this.rowData;
+                    if (this.path == "clone") this.isCloneHidden = false;
+
                     for (let i in _columns) {
                         if (_columns[i].COL_NAME != "" && _columns[i].IMS_COLUMN_NAME == "New One Needed") {
                             this.isSaveDisabled = true;
                             if (this.path == "clone") {
-                                this.isCloneHidden = true;
+                                this.isCloneHidden = true;                                
                             }
                         }
+                    }
+
+                    if (this.path == "clone" && !this.isCloneHidden) {
+                        this.clone_layout_desc = "";
+                        this.clone_layout_id = this.appService.maxLayoutID + 1;
                     }
                 }
             } else {

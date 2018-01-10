@@ -20,6 +20,7 @@ export class AppService{
     data: any;
     activeMenu: string = "";
     STDColumnList: any[] = [];
+    maxLayoutID: any = 0; 
 
     public notifier$: Subject<any>;
 

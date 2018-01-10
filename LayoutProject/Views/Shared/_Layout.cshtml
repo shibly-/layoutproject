@@ -22,13 +22,13 @@
     </script>
 </head>
 <body>
-    <div class="container body-content">
+    <div class="container body-content" style="min-height: 580px">
         @RenderBody()
-        <hr>
-        <footer class="text-center text-muted">
-            <p>&copy; @DateTime.Now.Year</p>            
-        </footer>
     </div>
+    <hr style="display:none;" class="showFooter">
+    <footer class="text-center text-muted showFooter" style="display:none;">
+        <p>&copy; @DateTime.Now.Year</p>
+    </footer>
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
