@@ -16,7 +16,8 @@ export class AppService{
 
     LayoutList : any[];
     layoutdata : any[] = [];
-    dataList : any[] = [];
+    dataList: any[] = [];
+    rowDataCopy: any[];
     data: any;
     activeMenu: string = "";
     STDColumnList: any[] = [];

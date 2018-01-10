@@ -24,6 +24,7 @@ export class MyGridApplicationComponent {
     gridOptions: GridOptions;
     columnDefs: any[]
     rowData: any[];
+    rowDataCopy: any[];
     Standard_col_values: any[];
     Datatype_values: any[];
     rowCount: number = 1;
@@ -348,6 +349,7 @@ export class MyGridApplicationComponent {
         };
         var res = this.gridOptions.api.updateRowData({ add: [newItem] });
         this.rowData.push(newItem);
+        //this.gridOptions.rowData.push(newItem);
         this.service.rowCount++;
     }
 
@@ -567,11 +569,22 @@ export class MyGridApplicationComponent {
     }
 
     private onCancelClicked() {
+        this.isSaveDisabled = true;
         if (this.path == "add") {
             this.form.Layout_Description = '';
             this.form.layout_id = null;
-            console.log(this.gridOptions.rowData)
-            this.gridOptions.rowData = [];
+            this.service.rowCount = 1;
+            let data = [{
+                COL_ID: 0, COL_ORDER: this.service.rowCount,
+                COL_NAME: "", IMS_COLUMN_NAME: "", DATA_COLUMN_TYPE: "",
+                MANDATORY: false, UNIQUE_KEY: false
+            }];
+
+            //this.gridOptions.api.setRowData(data);
+            this.rowData = data;
+        } else if (this.path == "edit") {
+            //this.gridOptions.api.setRowData(this.rowDataCopy);
+            this.rowData = Object.assign([], this.appService.rowDataCopy);
         }
     }
 

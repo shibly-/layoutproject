@@ -64,6 +64,13 @@ export class FormComponent{
         }else{
             this.haslayoutError = false;
             this.filteredData = this.appService.layoutdata.filter(element => element.Layout_Description === value);
+
+            this.appService.rowDataCopy = [];
+            for (let dt of this.filteredData[0].Columns) {
+                let obj = Object.assign(Object.create(Object.getPrototypeOf(dt)), dt);
+                this.appService.rowDataCopy.push(obj);
+            }
+
             this.layout_id = this.filteredData[0].Layout_id; 
             if (this.filteredData[0].Active_Ind) {
                 this.onLayoutChange.emit(this.filteredData);
