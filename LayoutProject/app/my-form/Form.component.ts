@@ -39,6 +39,11 @@ export class FormComponent{
         this.appService.getList().subscribe(data => {
             let d = JSON.parse(data); 
             this.appService.layoutdata = d;
+
+            for (var i in d) {
+                if (d[i].Layout_id > this.appService.maxLayoutID)
+                    this.appService.maxLayoutID = d[i].Layout_id;
+            }
         });
     }
 

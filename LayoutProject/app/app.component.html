@@ -4,14 +4,15 @@
             <li [class.active]="activeMenu=='add'" role="presentation"><a (click)="setActiveMenu('add')" routerLink="/add">ADD</a></li>
             <li [class.active]="activeMenu=='edit'" role="presentation"><a (click)="setActiveMenu('edit')" routerLink="/edit">EDIT</a></li>
             <li [class.active]="activeMenu=='view'" role="presentation"><a (click)="setActiveMenu('view')" routerLink="/view">VIEW</a></li>
-            <li [class.active]="activeMenu=='delete'" role="presentation"><a (click)="setActiveMenu('delete')" routerLink="/delete">DELETE</a></li>
+            <li [class.active]="activeMenu=='delete'" role="presentation" class="disabled"><a>DELETE</a></li> <!--(click)="setActiveMenu('delete')" routerLink="/delete"-->
             <li [class.active]="activeMenu=='clone'" role="presentation"><a (click)="setActiveMenu('clone')" routerLink="/clone">CLONE</a></li>
             <li [class.active]="activeMenu=='export'" role="presentation"><a (click)="setActiveMenu('export')" routerLink="/export">EXPORT</a></li>
         </ul>
     </nav>
 </header>
 <content class="aggrid-content">
+    <div [class.hidden]="hideExtraDiv==true" style="min-height: 0" class="hideExtraDiv">
+        &nbsp;
+    </div>
     <router-outlet></router-outlet>
 </content>
-
-
