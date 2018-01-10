@@ -38,8 +38,8 @@ export class MyGridApplicationComponent {
     infiniteLoopBlock: boolean;
     public isGridHidden: boolean;
     public isButtonHidden: boolean;
-    layoutData : any;
-    public selectedLayout: any = ''; 
+    layoutData: any;
+    public selectedLayout: any = '';
     isCloneHidden: boolean;
     label: string = "New Layout Description";
     cloneButtonTitle: string = "Save";
@@ -51,11 +51,12 @@ export class MyGridApplicationComponent {
 
     constructor(private route: ActivatedRoute, private service: EmployeeService, private appService: AppService, private http: Http) {
         this.appService.activeMenu = this.path = this.route.snapshot.url.join('/');
+        this.service.rowCount = 1;
         this.formOptions();
         this.declare_standardColNames();
         this.declare_dataTypes();
         this.declare_colDefs();
-        if(this.path == "add"){
+        if (this.path == "add") {
             this.declare_rowData();
         }
         this.declare_gridOptions();
@@ -74,7 +75,7 @@ export class MyGridApplicationComponent {
             this.isGridHidden = true;
             this.isButtonHidden = true;
         } else if (this.path == "delete") {
-            this.buttonTitle = "Delete";            
+            this.buttonTitle = "Delete";
         } else if (this.path == "export") {
             this.buttonTitle = "Export";
         } else if (this.path == "clone") {
@@ -85,12 +86,12 @@ export class MyGridApplicationComponent {
         }
     }
 
-    ngOnDestroy(){
+    ngOnDestroy() {
 
     }
 
-    onGridReady(params) {        
-        params.api.sizeColumnsToFit();        
+    onGridReady(params) {
+        params.api.sizeColumnsToFit();
     }
 
     selectAllRows() {
@@ -118,7 +119,7 @@ export class MyGridApplicationComponent {
                 editable: false,
                 width: 125,
                 pinned: null,
-                cellClass: 'text-center'                
+                cellClass: 'text-center'
             },
             {
                 headerName: "Attribute Name",
@@ -152,7 +153,7 @@ export class MyGridApplicationComponent {
                 cellEditor: 'richSelect',
                 cellEditorParams: {
                     values: ['TRUE', 'FALSE']
-                },                
+                },
                 field: "MANDATORY",
                 editable: this.decideEdit(),
                 width: 100,
@@ -164,7 +165,7 @@ export class MyGridApplicationComponent {
                 editable: this.decideEdit(),
                 cellEditor: 'richSelect',
                 cellEditorParams: {
-                    values: ['TRUE', 'FALSE']                 
+                    values: ['TRUE', 'FALSE']
                 },
                 width: 115,
                 cellClass: 'text-center'
@@ -185,7 +186,7 @@ export class MyGridApplicationComponent {
         if (this.path != "add") {
             //this.rowData = this.appService.getList().Columns;
             //this.service.rowCount = this.rowData.length;
-            if(this.appService.data !== undefined){
+            if (this.appService.data !== undefined) {
                 this.rowData = this.appService.data[0].Columns;
                 this.service.rowCount = this.rowData.length;
             }
@@ -307,7 +308,7 @@ export class MyGridApplicationComponent {
         }
 
         this.appService.getLayoutList().subscribe(data => {
-            let d = JSON.parse(data); 
+            let d = JSON.parse(data);
             this.SearchFormOptions = d;
             this.appService.LayoutList = d;
         });
@@ -359,7 +360,7 @@ export class MyGridApplicationComponent {
     private onDeleteClicked(row) {
         let res = this.gridOptions.api.updateRowData({ remove: [row] });
         let removedRowIndex = this.rowData.findIndex(r => r.COL_ORDER == row.COL_ORDER);
-        this.rowData.splice(removedRowIndex,1);
+        this.rowData.splice(removedRowIndex, 1);
         this.rowCount--;
     }
 
@@ -371,77 +372,224 @@ export class MyGridApplicationComponent {
         }
     }
 
+    private Save() {
+        let data = this.gridOptions.rowData;
+
+        if (this.path == "add") {
+            this.Add(data);
+        } else if (this.path == "edit") {
+            this.Edit(data);
+        } else if (this.path == 'clone') {
+            this.Clone(data);
+        }
+    }
+
+    private Add(data) {
+        if (!this.form.validateLayout(this.form.Layout_Description)) {
+            this.isSaveDisabled = true;
+        } else {
+            for (let i in data) {
+                if (data[i].COL_NAME == "" || data[i].IMS_COLUMN_NAME == "" || data[i].DATA_COLUMN_TYPE == "") {
+                    this.onDeleteClicked(data[i]);
+                }
+            }
+
+            for (let row of data) {
+                let index = data.indexOf(row);
+                if (index == data.length - 1) {
+                    break;
+                }
+
+                let list = data.slice(index + 1);
+                for (let ex of list) {
+                    if (ex.COL_NAME == row.COL_NAME) {
+                        alert('Every \'Attribute Name\' should be different!');
+                        return;
+                    }
+
+                    if (ex.IMS_COLUMN_NAME == row.IMS_COLUMN_NAME) {
+                        alert('Every \'Standard Attribute Name\' should be different!');
+                        return;
+                    }
+                }
+            }
+
+            jQuery("#lpConfirmationModalBtnClose ").trigger('click');
+
+            let _columnCount = 1;
+            if (data.length)
+                data.map(_ => {
+                    _["COL_ID"] = _columnCount;
+                    _["COL_ORDER"] = _columnCount++;
+                    return _;
+                });
+
+            this.layoutData = {
+                Layout_id: this.form.layout_id,
+                Layout_Description: this.form.Layout_Description,
+                Columns: data,
+                Active_Ind: true
+            }
+
+            this.appService.addToList(this.layoutData).subscribe((data) => {
+                if (data) {
+                    this.setNotificationModalContent('Notification', MESSAGE_CONST.SAVE_SUCCEED);
+                    jQuery("#lpNotificationModalBtn").trigger('click');
+
+                    this.isSaveDisabled = true;
+                    if (this.appService.LayoutList.length) {
+                        this.appService.LayoutList.push(this.layoutData.Layout_Description);
+                        this.appService.layoutdata.push(this.layoutData);
+                    }
+                } else {
+                    this.setNotificationModalContent('Notification', MESSAGE_CONST.SAVE_FAILED);
+                    jQuery("#lpNotificationModalBtn").trigger('click');
+                }
+            });
+        }
+    }
+
+    private Edit(data) {
+        let _columnCount = 1;
+        if (data.length)
+            data.map(_ => {
+                _["COL_ORDER"] = _columnCount++;
+                return _;
+            });
+
+        for (let row of data) {
+            let index = data.indexOf(row);
+            if (index == data.length - 1) {
+                break;
+            }
+
+            let list = data.slice(index + 1);
+            for (let ex of list) {
+                if (ex.COL_NAME == row.COL_NAME) {
+                    alert('Every \'Attribute Name\' should be different!');
+                    return;
+                }
+
+                if (ex.IMS_COLUMN_NAME == row.IMS_COLUMN_NAME) {
+                    alert('Every \'Standard Attribute Name\' should be different!');
+                    return;
+                }
+            }
+        }
+
+        jQuery("#lpConfirmationModalBtnClose ").trigger('click');
+
+        this.layoutData = {
+            Layout_id: this.form.layout_id,
+            Layout_Description: this.form.layoutOption,
+            Columns: data,
+            Active_Ind: true,
+        }
+
+        let layoutDataWrapper: any = this.layoutData;
+        let layoutDataAsJSON = JSON.stringify(layoutDataWrapper);
+        this.appService.saveLayoutList(layoutDataWrapper).subscribe((data) => {
+            if (data) {
+                this.isSaveDisabled = true;
+                this.setNotificationModalContent('Notification', MESSAGE_CONST.SAVE_SUCCEED);
+                jQuery("#lpNotificationModalBtn").trigger('click');
+            } else {
+                this.setNotificationModalContent('Notification', MESSAGE_CONST.SAVE_FAILED);
+                jQuery("#lpNotificationModalBtn").trigger('click');
+            }
+        });
+    }
+
+    private Clone(data) {
+        if (this.clone_layout_desc.trim() == "") {
+            this.setNotificationModalContent('Notification', "Please enter the layout description.");
+            jQuery("#lpNotificationModalBtn").trigger('click');
+            return false;
+        }
+
+        jQuery("#lpConfirmationModalBtnClose ").trigger('click');
+
+        // do clone
+        for (let i in data) {
+            if (data[i].COL_NAME == "" || data[i].IMS_COLUMN_NAME == "" || data[i].DATA_COLUMN_TYPE == "") {
+                this.onDeleteClicked(data[i]);
+            }
+        }
+
+        this.layoutData = {
+            Layout_id: this.clone_layout_id,
+            Layout_Description: this.clone_layout_desc,
+            Columns: data,
+            Active_Ind: true
+        }
+
+        this.isCloneHidden = true;
+        this.isSaveDisabled = true;
+        this.appService.addToList(this.layoutData).subscribe((data) => {
+            if (data) {
+                this.setNotificationModalContent('Notification', MESSAGE_CONST.SAVE_SUCCEED);
+                jQuery("#lpNotificationModalBtn").trigger('click');
+
+                this.isSaveDisabled = true;
+                if (this.appService.LayoutList.length) {
+                    this.appService.LayoutList.push(this.layoutData.Layout_Description);
+                    this.appService.layoutdata.push(this.layoutData);
+                }
+
+                this.isCloneHidden = true;
+                this.clone_layout_desc = "";
+                //this.clone_layout_id = this.appService.maxLayoutID + 1;
+                this.isGridHidden = true;
+                this.isButtonHidden = true;
+
+            } else {
+                this.isCloneHidden = false;
+                this.setNotificationModalContent('Notification', MESSAGE_CONST.SAVE_FAILED);
+                jQuery("#lpNotificationModalBtn").trigger('click');
+            }
+        });
+    }
+
     private onSaveClicked() {
         let AddedData;
         let data = this.gridOptions.rowData;
         if (this.path == "add") {
-            this.setConfirmationModalContent('Please Confirm', 'Do you want to save this item?');
-            jQuery("#lpConfirmationModalBtn").trigger('click');
-            
-            if (!this.form.validateLayout(this.form.Layout_Description)) {
-                this.isSaveDisabled = true;
-            } else {
-                for (let i in data) {
-                    if (data[i].COL_NAME == "" || data[i].IMS_COLUMN_NAME == "" || data[i].DATA_COLUMN_TYPE == "") {
-                        this.onDeleteClicked(data[i]);
-                    }
-                }
-                
-                for (let row of data) {
-                    let index = data.indexOf(row);
-                    if (index == data.length - 1) {
-                        break;
-                    }
-
-                    let list = data.slice(index + 1);
-                    for (let ex of list) {
-                        if (ex.COL_NAME == row.COL_NAME) {
-                            alert('Every \'Attribute Name\' should be different!');
-                            return;
-                        }
-
-                        if (ex.IMS_COLUMN_NAME == row.IMS_COLUMN_NAME) {
-                            alert('Every \'Standard Attribute Name\' should be different!');
-                            return;
-                        }
-                    }
-                }
-
-                let _columnCount = 1;
-                if (data.length)
-                    data.map(_ => {
-                        _["COL_ID"] = _columnCount;
-                        _["COL_ORDER"] = _columnCount++;
-                        return _;
-                    });
-
-                this.layoutData = {
-                    Layout_id: this.form.layout_id,
-                    Layout_Description: this.form.Layout_Description,
-                    Columns: data,
-                    Active_Ind: true
-                }
-
-                this.appService.addToList(this.layoutData).subscribe((data) => {
-                    if (data) {
-                        this.setNotificationModalContent('Notification', MESSAGE_CONST.SAVE_SUCCEED);
-                        jQuery("#lpNotificationModalBtn").trigger('click');
-
-                        this.isSaveDisabled = true;
-                        if (this.appService.LayoutList.length) {
-                            this.appService.LayoutList.push(this.layoutData.Layout_Description);
-                            this.appService.layoutdata.push(this.layoutData);
-                        }
-                    } else {
-                        this.setNotificationModalContent('Notification', MESSAGE_CONST.SAVE_FAILED);
-                        jQuery("#lpNotificationModalBtn").trigger('click');
-                    } 
-
-                    AddedData = data;
-                });
+            this.setConfirmationModalContent('Confirmation', 'Do you want to add this item?');
+            jQuery("#lpConfirmationModalBtn").trigger('click');            
+        } else if (this.path == "edit") {
+            this.setConfirmationModalContent('Confirmation', 'Do you want to update this item?');
+            jQuery("#lpConfirmationModalBtn").trigger('click'); 
+        } else if (this.path == "delete") {
+            this.layoutData = {
+                Layout_id: this.form.layout_id,
+                Layout_Description: this.form.layoutOption,
+                Columns: data,
+                Active_Ind: false,
             }
-        }
-        else if (this.path == "export") {
+
+            let layoutDataWrapper: any = this.layoutData;
+            let layoutDataAsJSON = JSON.stringify(layoutDataWrapper);
+            this.appService.saveLayoutList(layoutDataWrapper).subscribe((data) => {
+                if (data) {
+                    this.setNotificationModalContent('Notification', MESSAGE_CONST.SAVE_SUCCEED);
+                    jQuery("#lpNotificationModalBtn").trigger('click');
+
+                    this.isGridHidden = true;
+                    this.isButtonHidden = true;
+                    for (let ex of this.appService.layoutdata) {
+                        if (ex.Layout_id == this.layoutData.Layout_id) {
+                            ex.Active_Ind = false;
+                        }
+                    }
+                } else {
+                    this.setNotificationModalContent('Notification', MESSAGE_CONST.SAVE_FAILED);
+                    jQuery("#lpNotificationModalBtn").trigger('click');
+                }
+            });
+        } else if (this.path == 'clone') {
+            this.setConfirmationModalContent('Confirmation', 'Do you want to clone this item?');
+            jQuery("#lpConfirmationModalBtn").trigger('click'); 
+        } else if (this.path == "export") {
             for (let i in data) {
                 if (data[i].COL_NAME != "" && data[i].IMS_COLUMN_NAME == "New One Needed") {
                     return false;
@@ -467,132 +615,7 @@ export class MyGridApplicationComponent {
             body.appendChild(a);
             a.click();
             a.remove();
-        }
-        else if (this.path == "edit") {
-
-            let _columnCount = 1;
-            if (data.length)
-                data.map(_ => {
-                    _["COL_ORDER"] = _columnCount++;
-                    return _;
-                });
-
-            for (let row of data) {
-                let index = data.indexOf(row);
-                if (index == data.length - 1) {
-                    break;
-                }
-
-                let list = data.slice(index + 1);
-                for (let ex of list) {
-                    if (ex.COL_NAME == row.COL_NAME) {
-                        alert('Every \'Attribute Name\' should be different!');
-                        return;
-                    }
-
-                    if (ex.IMS_COLUMN_NAME == row.IMS_COLUMN_NAME) {
-                        alert('Every \'Standard Attribute Name\' should be different!');
-                        return;
-                    }
-                }
-            }
-
-            this.layoutData = {
-                Layout_id: this.form.layout_id,
-                Layout_Description: this.form.layoutOption,
-                Columns: data,
-                Active_Ind: true,
-            }
-
-            let layoutDataWrapper: any = this.layoutData;
-            let layoutDataAsJSON = JSON.stringify(layoutDataWrapper);
-            this.appService.saveLayoutList(layoutDataWrapper).subscribe((data) => {
-                if (data) {
-                    this.isSaveDisabled = true;
-                    this.setNotificationModalContent('Notification', MESSAGE_CONST.SAVE_SUCCEED);
-                    jQuery("#lpNotificationModalBtn").trigger('click');
-                } else {
-                    this.setNotificationModalContent('Notification', MESSAGE_CONST.SAVE_FAILED);
-                    jQuery("#lpNotificationModalBtn").trigger('click');
-                }             
-            });
-        }
-        else if (this.path == "delete") {
-            this.layoutData = {
-                Layout_id: this.form.layout_id,
-                Layout_Description: this.form.layoutOption,
-                Columns: data,
-                Active_Ind: false,
-            }
-
-            let layoutDataWrapper: any = this.layoutData;
-            let layoutDataAsJSON = JSON.stringify(layoutDataWrapper);
-            this.appService.saveLayoutList(layoutDataWrapper).subscribe((data) => {
-                if (data) {
-                    this.setNotificationModalContent('Notification', MESSAGE_CONST.SAVE_SUCCEED);
-                    jQuery("#lpNotificationModalBtn").trigger('click');
-
-                    this.isGridHidden = true;
-                    this.isButtonHidden = true;
-                    for (let ex of this.appService.layoutdata) {
-                        if (ex.Layout_id == this.layoutData.Layout_id) {
-                            ex.Active_Ind = false;
-                        }
-                    }
-                } else {
-                    this.setNotificationModalContent('Notification', MESSAGE_CONST.SAVE_FAILED);
-                    jQuery("#lpNotificationModalBtn").trigger('click');
-                } 
-            });            
-        }
-        else if (this.path == 'clone') {
-            if (this.clone_layout_desc.trim() == "") {
-                this.setNotificationModalContent('Notification', "Please enter the layout description.");
-                jQuery("#lpNotificationModalBtn").trigger('click');
-                return false;
-            }
-
-            // do clone
-            for (let i in data) {
-                if (data[i].COL_NAME == "" || data[i].IMS_COLUMN_NAME == "" || data[i].DATA_COLUMN_TYPE == "") {
-                    this.onDeleteClicked(data[i]);
-                }
-            }
-            
-            this.layoutData = {
-                Layout_id: this.clone_layout_id,
-                Layout_Description: this.clone_layout_desc,
-                Columns: data,
-                Active_Ind: true
-            }
-
-            this.isCloneHidden = true;
-            this.isSaveDisabled = true;
-            this.appService.addToList(this.layoutData).subscribe((data) => {
-                if (data) {
-                    this.setNotificationModalContent('Notification', MESSAGE_CONST.SAVE_SUCCEED);
-                    jQuery("#lpNotificationModalBtn").trigger('click');
-
-                    this.isSaveDisabled = true;
-                    if (this.appService.LayoutList.length) {
-                        this.appService.LayoutList.push(this.layoutData.Layout_Description);
-                        this.appService.layoutdata.push(this.layoutData);
-                    }
-
-                    this.isCloneHidden = true;
-                    this.clone_layout_desc = "";
-                    this.clone_layout_id = this.appService.maxLayoutID + 1;
-                    this.isGridHidden = true;
-                    this.isButtonHidden = true;
-
-                } else {
-                    this.isCloneHidden = false;
-                    this.setNotificationModalContent('Notification', MESSAGE_CONST.SAVE_FAILED);
-                    jQuery("#lpNotificationModalBtn").trigger('click');
-                }
-            });
-        }
-        else {
+        } else {
             if (this.form.layoutOption == "default") {
                 this.form.validateLayoutDescr(this.form.layoutOption)
             } else {
@@ -624,19 +647,26 @@ export class MyGridApplicationComponent {
 
             //this.gridOptions.api.setRowData(data);
             this.rowData = data;
+            --this.appService.maxLayoutID;
         } else if (this.path == "edit") {
             //this.gridOptions.api.setRowData(this.rowDataCopy);
             this.rowData = Object.assign([], this.appService.rowDataCopy);
+
+            this.rowData = [];
+            for (let dt of this.appService.rowDataCopy) {
+                let obj = Object.assign(Object.create(Object.getPrototypeOf(dt)), dt);
+                this.rowData.push(obj);
+            }
         }
     }
 
     public ViewGrid(event) {
-        if(this.path == "add"){
+        if (this.path == "add") {
             this.isSaveDisabled = false;
         }
         else {
             if (this.path == "delete" || this.path == "clone" || this.path == "export") {
-                this.isSaveDisabled = false;     
+                this.isSaveDisabled = false;
             }
             else {
                 this.isSaveDisabled = true;
@@ -651,8 +681,8 @@ export class MyGridApplicationComponent {
                 //this.declare_rowData();
                 //this.declare_standardColNames();
                 this.declare_colDefs();
-                if(this.path != "view"){
-                    this.isButtonHidden = false;    
+                if (this.path != "view") {
+                    this.isButtonHidden = false;
                 }
                 if ((this.path == "clone" || this.path == "export") && this.service.rowCount > 0) {
                     let _columns = this.rowData;
@@ -662,14 +692,14 @@ export class MyGridApplicationComponent {
                         if (_columns[i].COL_NAME != "" && _columns[i].IMS_COLUMN_NAME == "New One Needed") {
                             this.isSaveDisabled = true;
                             if (this.path == "clone") {
-                                this.isCloneHidden = true;                                
+                                this.isCloneHidden = true;
                             }
                         }
                     }
 
                     if (this.path == "clone" && !this.isCloneHidden) {
                         this.clone_layout_desc = "";
-                        this.clone_layout_id = this.appService.maxLayoutID + 1;
+                        this.clone_layout_id = ++this.appService.maxLayoutID;
                     }
                 }
             } else {
@@ -702,7 +732,7 @@ export class MyGridApplicationComponent {
     private cfModalBody: string = "Content";
     private nfModalTitle: string = "Title";
     private nfModalBody: string = "Content";
-    
+
     public show(): void {
         this.visible = true;
         setTimeout(() => this.visibleAnimate = true, 100);
