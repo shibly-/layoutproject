@@ -99,7 +99,17 @@ export class MyGridApplicationComponent {
     }
 
     private declare_standardColNames() {
-        this.Standard_col_values = this.service.getStandard_col_val();
+        //this.Standard_col_values = this.service.getStandard_col_val();
+        if (this.appService.STDColumnList.length) {
+            this.Standard_col_values = this.appService.STDColumnList;
+            return;
+        }
+
+        this.appService.getSTDColumnList().subscribe(data => {
+            let d = JSON.parse(data);
+            this.Standard_col_values = d;
+            this.appService.STDColumnList = d;
+        });
     }
 
     private declare_dataTypes() {
@@ -708,11 +718,6 @@ export class MyGridApplicationComponent {
             }
         }
     }
-
-    /*private validateLayout(event) {
-        this.layout_id = this.appService.layoutdata.length + 1;
-        console.log(event);
-    }*/
 
     // modal codes
     /*
