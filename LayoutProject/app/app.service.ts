@@ -19,12 +19,14 @@ export class AppService{
     dataList : any[] = [];
     data: any;
     activeMenu: string = "";
+    STDColumnList: any[] = [];
 
     public notifier$: Subject<any>;
 
     constructor(private gridService : EmployeeService,private http: Http){
         this.notifier$ = new Subject();
-        this.LayoutList = [];        
+        this.LayoutList = []; 
+        this.STDColumnList = [];       
     }
 
     public async setList(event){
@@ -44,6 +46,11 @@ export class AppService{
     public getLayoutList(){
         return this.http.get('api/MongoDB/getLayoutList')
             .map((res: any) => res.json()); 
+    }
+
+    public getSTDColumnList() {
+        return this.http.get('api/MongoDB/getSTDColumnList')
+            .map((res: any) => res.json());
     }
 
     public saveLayoutList(data) {

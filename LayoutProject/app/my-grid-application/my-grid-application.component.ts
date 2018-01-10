@@ -37,6 +37,11 @@ export class MyGridApplicationComponent {
     public isButtonHidden: boolean;
     layoutData : any;
     public selectedLayout: any = ''; 
+    isCloneHidden: boolean;
+    label: string = "New Layout Description";
+    cloneButtonTitle: string = "Save";
+    layout_id: number;
+    layoutDescription: string;
 
     constructor(private route: ActivatedRoute, private service: EmployeeService, private appService: AppService, private http: Http) {
         this.appService.activeMenu = this.path = this.route.snapshot.url.join('/');
@@ -52,6 +57,8 @@ export class MyGridApplicationComponent {
     }
 
     ngOnInit() {
+
+        this.isCloneHidden = true;
         if (this.path == "add") {
             this.buttonTitle = "Save";
             this.isGridHidden = false;
@@ -105,13 +112,15 @@ export class MyGridApplicationComponent {
                 headerName: "Column Order",
                 field: "COL_ORDER",
                 editable: false,
-                width: 125
+                width: 125,
+                pinned: null,
+                cellClass: 'text-center'                
             },
             {
                 headerName: "Attribute Name",
                 field: "COL_NAME",
                 editable: this.decideEdit(),
-                width: 325
+                width: 335
             },
             {
                 headerName: "Standard Attribute Name",
@@ -121,7 +130,7 @@ export class MyGridApplicationComponent {
                 cellEditorParams: {
                     values: this.Standard_col_values,
                 },
-                width: 325
+                width: 335
             },
             {
                 headerName: "Data type",
@@ -131,17 +140,19 @@ export class MyGridApplicationComponent {
                 cellEditorParams: {
                     values: this.Datatype_values
                 },
-                width: 100
+                width: 100,
+                cellClass: 'text-center'
             },
             {
                 headerName: "Required",
                 cellEditor: 'richSelect',
                 cellEditorParams: {
                     values: ['TRUE', 'FALSE']
-                },
+                },                
                 field: "MANDATORY",
                 editable: this.decideEdit(),
-                width: 100
+                width: 100,
+                cellClass: 'text-center'
             },
             {
                 headerName: "Unique Key",
@@ -151,7 +162,8 @@ export class MyGridApplicationComponent {
                 cellEditorParams: {
                     values: ['TRUE', 'FALSE']                 
                 },
-                width: 115
+                width: 115,
+                cellClass: 'text-center'
             }
         ];
     }
@@ -160,7 +172,7 @@ export class MyGridApplicationComponent {
         if ((this.path == 'add') || (this.path == "edit")) {
             return true;
         }
-        if (this.path == "view") {
+        if ((this.path == "view") || (this.path == "clone")) {
             return false;
         }
     }
@@ -346,6 +358,14 @@ export class MyGridApplicationComponent {
         this.rowCount--;
     }
 
+    private cloneSaveClicked() {
+        this.layoutData = {
+            LayoutID: this.form.layout_id + 1,
+            LayoutDescr: this.form.layoutDescription,
+            DataList: this.gridOptions.rowData,
+        }
+    }
+
     private onSaveClicked() {
         let AddedData;
         let data = this.gridOptions.rowData;
@@ -520,6 +540,14 @@ export class MyGridApplicationComponent {
                 } 
             });
         }
+        else if (this.path == 'clone') {
+            this.isCloneHidden = false;
+            //this.form.isAddRowhidden = false;
+            //this.form.layout_id = "";
+            this.decideEdit();
+            this.isSaveDisabled = true;
+
+        }
         else {
             if (this.form.layoutOption == "default") {
                 this.form.validateLayoutDescr(this.form.layoutOption)
@@ -576,6 +604,9 @@ export class MyGridApplicationComponent {
                     for (let i in _columns) {
                         if (_columns[i].COL_NAME != "" && _columns[i].IMS_COLUMN_NAME == "New One Needed") {
                             this.isSaveDisabled = true;
+                            if (this.path == "clone") {
+                                this.isCloneHidden = true;
+                            }
                         }
                     }
                 }
@@ -586,6 +617,10 @@ export class MyGridApplicationComponent {
         }
     }
 
+    /*private validateLayout(event) {
+        this.layout_id = this.appService.layoutdata.length + 1;
+        console.log(event);
+    }*/
 
     // modal codes
     /*
