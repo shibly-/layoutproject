@@ -38,8 +38,7 @@ export class MyGridApplicationComponent {
     layoutData : any;
     public selectedLayout: any = ''; 
 
-    constructor(private route: ActivatedRoute, private service: EmployeeService,
-        private appService: AppService, private http: Http) {
+    constructor(private route: ActivatedRoute, private service: EmployeeService, private appService: AppService, private http: Http) {
         this.appService.activeMenu = this.path = this.route.snapshot.url.join('/');
         this.formOptions();
         this.declare_standardColNames();
@@ -347,11 +346,13 @@ export class MyGridApplicationComponent {
         this.rowCount--;
     }
 
-
     private onSaveClicked() {
         let AddedData;
         let data = this.gridOptions.rowData;
         if (this.path == "add") {
+            this.setConfirmationModalContent('Please Confirm', 'Do you want to save this item?');
+            jQuery("#lpConfirmationModalBtn").trigger('click');
+            
             if (!this.form.validateLayout(this.form.Layout_Description)) {
                 this.isSaveDisabled = true;
             } else {
@@ -398,12 +399,19 @@ export class MyGridApplicationComponent {
 
                 this.appService.addToList(this.layoutData).subscribe((data) => {
                     if (data) {
+                        this.setNotificationModalContent('Notification', MESSAGE_CONST.SAVE_SUCCEED);
+                        jQuery("#lpNotificationModalBtn").trigger('click');
+
                         this.isSaveDisabled = true;
                         if (this.appService.LayoutList.length) {
                             this.appService.LayoutList.push(this.layoutData.Layout_Description);
                             this.appService.layoutdata.push(this.layoutData);
                         }
-                    }
+                    } else {
+                        this.setNotificationModalContent('Notification', MESSAGE_CONST.SAVE_FAILED);
+                        jQuery("#lpNotificationModalBtn").trigger('click');
+                    } 
+
                     AddedData = data;
                 });
             }
@@ -496,6 +504,9 @@ export class MyGridApplicationComponent {
             let layoutDataAsJSON = JSON.stringify(layoutDataWrapper);
             this.appService.saveLayoutList(layoutDataWrapper).subscribe((data) => {
                 if (data) {
+                    this.setNotificationModalContent('Notification', MESSAGE_CONST.SAVE_SUCCEED);
+                    jQuery("#lpNotificationModalBtn").trigger('click');
+
                     this.isGridHidden = true;
                     this.isButtonHidden = true;
                     for (let ex of this.appService.layoutdata) {
@@ -503,7 +514,10 @@ export class MyGridApplicationComponent {
                             ex.Active_Ind = false;
                         }
                     }
-                }
+                } else {
+                    this.setNotificationModalContent('Notification', MESSAGE_CONST.SAVE_FAILED);
+                    jQuery("#lpNotificationModalBtn").trigger('click');
+                } 
             });
         }
         else {
@@ -521,6 +535,15 @@ export class MyGridApplicationComponent {
                     rowData: data,
                 }
             }
+        }
+    }
+
+    private onCancelClicked() {
+        if (this.path == "add") {
+            this.form.Layout_Description = '';
+            this.form.layout_id = null;
+            console.log(this.gridOptions.rowData)
+            this.gridOptions.rowData = [];
         }
     }
 

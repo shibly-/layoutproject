@@ -15,8 +15,9 @@
 
 <div class="row" [(hidden)] = "isButtonHidden">
     <div class="col-xs-10"></div>
-    <div class="col-xs-2">
+    <div class="col-xs-2" style="text-align: right;">
         <button class="btn btn-primary"  (click)="onSaveClicked()" [(disabled)]="isSaveDisabled">{{ buttonTitle }}</button>
+        <button class="btn btn-primary" (click)="onCancelClicked()" [(disabled)]="isSaveDisabled">Cancel</button>
     </div>
 </div>
 
