@@ -17,6 +17,7 @@ export class FormComponent{
     haslayoutError : boolean = false;
     path:string;
     isAddRowhidden: boolean;
+    isHomePage: boolean;
     hideLayoutMsg: boolean = true;
     layoutRelatedMsg: string = "";
     filteredData : any[];
@@ -26,6 +27,12 @@ export class FormComponent{
 
     constructor(private route:ActivatedRoute, private appService : AppService){
         this.path = this.route.snapshot.url.join('/');
+
+        if (this.path == 'home') {
+            this.isHomePage = true;
+        } else {
+            this.isHomePage = false;
+        }
     }
 
     ngOnInit(){

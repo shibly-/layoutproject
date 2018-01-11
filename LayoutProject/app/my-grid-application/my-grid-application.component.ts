@@ -56,6 +56,7 @@ export class MyGridApplicationComponent {
         if (this.path == "home") {
             return;
         }
+
         this.service.rowCount = 1;
         this.formOptions();
         this.declare_standardColNames();

@@ -1,5 +1,5 @@
 <div class="container">
-    <form class="form-inline" style="margin-left:30px" novalidate #formLayout>
+    <form class="form-inline" style="margin-left:30px" novalidate #formLayout [(hidden)]="isHomePage">
         <div class="row" #addForm [(hidden)]="isAddRowhidden">
             <div class="col-xs-5">
                 <div class="form-group" [class.has-error]="haslayoutError">
