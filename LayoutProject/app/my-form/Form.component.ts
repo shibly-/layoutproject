@@ -20,7 +20,9 @@ export class FormComponent{
     hideLayoutMsg: boolean = true;
     layoutRelatedMsg: string = "";
     filteredData : any[];
-    firstLayout: string = "";
+    @Input() firstLayout: string = "";
+    @Output('onAddLayoutChange') onAddLayoutChange = new EventEmitter();
+    addedLayoutAlreadyExists: boolean = false;
 
     constructor(private route:ActivatedRoute, private appService : AppService){
         this.path = this.route.snapshot.url.join('/');
@@ -31,6 +33,11 @@ export class FormComponent{
             this.isAddRowhidden = false;
         }else{
             this.isAddRowhidden = true;
+            // set and call the first layout, if any
+            if (this.appService.LayoutList.length) {
+                this.layoutOption = this.firstLayout = this.appService.LayoutList[0];
+                this.validateLayoutDescr(this.appService.LayoutList[0]);
+            }
         }
 
         if (this.appService.layoutdata.length) {
@@ -46,12 +53,11 @@ export class FormComponent{
                     this.appService.maxLayoutID = d[i].Layout_id;
             }
 
-            // call the first layout, if any 
+            // call and set the first layout, if any 
             if (this.appService.LayoutList.length) {
                 this.firstLayout = this.appService.LayoutList[0];
                 this.validateLayoutDescr(this.appService.LayoutList[0]);
-            }
-                
+            }                
         });
     }
 
@@ -63,10 +69,31 @@ export class FormComponent{
         }else{
             flag = true;
             this.haslayoutError = false;
-            this.layout_id = ++this.appService.maxLayoutID;//this.appService.layoutdata.length + 1;
+            this.layout_id = this.appService.maxLayoutID + 1;
             this.onLayoutChange.emit(value);
         }
         return flag;
+    }
+
+    private checkAddLayoutDescr(value, showAlreadyExist: boolean) {
+        let enableAddLayout: boolean = false;
+        this.haslayoutError = false;
+        this.addedLayoutAlreadyExists = false;
+
+        let _value = value.trim();
+        let _layoutList = this.appService.LayoutList;
+        if (_value != "") {
+            enableAddLayout = true;
+            for (let i in _layoutList) {
+                if (_layoutList[i].toLowerCase() == _value.toLowerCase()) {
+                    enableAddLayout = false;
+                    if (showAlreadyExist) this.addedLayoutAlreadyExists = true;
+                }
+            }
+        }
+
+        if (!enableAddLayout) this.haslayoutError = true;
+        this.onAddLayoutChange.emit(enableAddLayout);
     }
 
     private validateLayoutDescr(value) {
