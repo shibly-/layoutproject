@@ -168,6 +168,7 @@
   <ItemGroup>
     <Content Include="app\app.component.css" />
     <Content Include="app\app.component.html" />
+    <Content Include="app\client-supplier-setup\client-supplier-setup.html" />
     <Content Include="app\dropdown-editor\dropdown.html" />
     <Content Include="app\edit-component\edit.html" />
     <Content Include="app\my-form\Form.html" />
@@ -238,6 +239,7 @@
     <TypeScriptCompile Include="app\app.module.ts" />
     <TypeScriptCompile Include="app\app.routing.ts" />
     <TypeScriptCompile Include="app\app.service.ts" />
+    <TypeScriptCompile Include="app\client-supplier-setup\client-supplier-setup.component.ts" />
     <TypeScriptCompile Include="app\deactivate-guard.service.ts" />
     <TypeScriptCompile Include="app\data.interface.ts" />
     <TypeScriptCompile Include="app\drag.drop.object.ts" />

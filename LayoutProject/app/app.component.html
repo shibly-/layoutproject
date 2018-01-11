@@ -1,4 +1,17 @@
-<header>
+<header [(hidden)]="isLayout">
+    <nav class="navbar navbar-default" role="navigation">
+        <ul class="nav navbar-nav">
+            <li [class.active]="activeMenu=='add'" role="presentation"><a (click)="setActiveMenu('add')" >ADD</a></li>
+            <li [class.active]="activeMenu=='edit'" role="presentation"><a (click)="setActiveMenu('edit')" >EDIT</a></li>
+            <li [class.active]="activeMenu=='view'" role="presentation"><a (click)="setActiveMenu('view')" >VIEW</a></li>
+            <li [class.active]="activeMenu=='delete'" role="presentation" class="disabled"><a>DELETE</a></li> <!--(click)="setActiveMenu('delete')" routerLink="/delete"-->
+            <li [class.active]="activeMenu=='clone'" role="presentation"><a (click)="setActiveMenu('clone')" >CLONE</a></li>
+            <li [class.active]="activeMenu=='export'" role="presentation"><a (click)="setActiveMenu('export')" >EXPORT</a></li>
+        </ul>
+    </nav>
+</header>
+
+<header [(hidden)]="!isLayout">
     <nav class="navbar navbar-default" role="navigation">
         <ul class="nav navbar-nav">
             <li [class.active]="activeMenu=='add'" role="presentation"><a (click)="setActiveMenu('add')" routerLink="/add">ADD</a></li>

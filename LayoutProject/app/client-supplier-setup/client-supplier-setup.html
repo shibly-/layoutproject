@@ -1,0 +1,485 @@
+<body>
+    <div class="container">
+        <form class="form-inline" novalidate #formLayout>
+            <div class="well well-lg" style="width:1250px; margin-left:-50px">
+                <div class="row">
+                    <div class="col-xs-2">
+                        <!-- <p>
+                            <a data-toggle="collapse" data-target="#configuration" (click)="ShowHideConfiguration()">
+                                <span class="glyphicon glyphicon-plus" [(hidden)] ="toggleConfiguration"></span>
+                                <span class="glyphicon glyphicon-minus" ></span>
+                            </a>
+                        </p> -->
+                        <button type="button" class="btn btn-default" data-toggle="collapse" data-target="#configuration" (click)="ShowHideConfiguration()">{{ toggleConfiguration ? "Show" : "Hide"}}</button>
+                    </div>
+                    <div class="col-xs-1">
+                        <h4 style="margin-left:-75px">
+                            <u>Configuration</u>
+                        </h4>
+                    </div>
+                </div>
+                <br>
+                <div id="configuration" class="collapse">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <div class="form-group">
+                                <label>Client</label>
+                                <input type="text" #clientName [(ngModel)]="ClientName" placeholder="Enter Client Name" name="clientName" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-xs-3">
+                            <div class="form-group">
+                                <label>Market</label>
+                                <input type="text" #market [(ngModel)]="MarketName" placeholder="Enter Market Name" name="marketName" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-xs-3">
+                            <div class="form-group">
+                                <label>File Type</label>
+                                <input type="text" #fileType [(ngModel)]="FileType" placeholder="Enter File Type" name="fileType" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-xs-3">
+                            <div class="form-group">
+                                <label>Supplier</label>
+                                <input type="text" #supplierName [(ngModel)]="SupplierName" placeholder="Enter Supplier Name" name="supplierName" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                    <div class="row" style="width:1300px; margin-left:-35px">
+                        <div class="col-xs-4">
+                            <div class="form-group">
+                                <label>Layout Description</label>
+                                <input type="text" #LayoutDescr [(ngModel)]="LayoutDescription" placeholder="Select Layout Description" name="layoutDescr"
+                                    class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-xs-3" style="margin-left:-50px">
+                            <div class="form-group">
+                                <label>Layout Id</label>
+                                <input type="text" #layoutId [(ngModel)]="LayoutId" placeholder="Enter Layout Id" name="layoutId" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-xs-3" style="margin-left:-50px">
+                            <div class="form-group">
+                                <label>Created On</label>
+                                <input type="text" #createdOn [(ngModel)]="CreatedOn" placeholder="Created Date" name="createdDate" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-xs-3" style="margin-left:-25px">
+                            <div class="form-group">
+                                <label>Updated on</label>
+                                <input type="text" #updatedOn [(ngModel)]="UpdatedOn" placeholder="Updated Date" name="updatedDate" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                    <div class="row" style="width:1300px; margin-left:-35px">
+                        <div class="col-xs-4">
+                            <div class="form-group">
+                                <label>Supplier FTP Site URL</label>
+                                <input type="text" #supplierUrl [(ngModel)]="SupplierUrl" placeholder="Enter Supplier Url" name="SupplierUrl" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-xs-3">
+                            <div class="form-group">
+                                <label>FTP User ID</label>
+                                <input type="text" #FtpId [(ngModel)]="ftpId" placeholder="Enter Ftp Id" name="Ftpid" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-xs-4">
+                            <div class="form-group">
+                                <label>FTP Password</label>
+                                <input type="text" #password [(ngModel)]="FtpPassword" placeholder="Enter Ftp Password" name="FtpPassword" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                    <div class="row" style="margin-left:-35px">
+                        <div class="col-xs-4">
+                            <div class="form-group">
+                                <label>FTP File Name</label>
+                                <input type="text" #ftpFileName [(ngModel)]="FtpFileName" placeholder="Enter the ftp file name" name="ftpFileName" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-xs-4">
+                            <div class="form-group">
+                                <label>File Delimiter</label>
+                                <input type="text" #FileDelimiter placeholder="Enter the file delimiter" name="fileDelimiter" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-xs-4">
+                            <label>Header Record</label>
+                            <div class="form-group radio">
+                                <label class="radio-inline">
+                                    <input type="radio" name="HeaderRecordValue">Yes</label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="HeaderRecordValue">No</label>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                    <div class="row" style="width:1300px; margin-left:-35px">
+                        <div class="col-xs-4">
+                            <label>Data File contains H & T record</label>
+                            <div class="form-group">
+                                <label class="radio-inline">
+                                    <input type="radio" name="htRecord">Yes</label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="htRecord">No</label>
+                            </div>
+                        </div>
+                        <div class="col-xs-3">
+                            <label>Control File Provided</label>
+                            <div class="form-group">
+                                <label class="radio-inline">
+                                    <input type="radio" name="CtrlFile">Yes</label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="CtrlFile">No</label>
+                            </div>
+                        </div>
+                        <div class="col-xs-4">
+                            <div class="form-group">
+                                <label>Control File Name</label>
+                                <input type="text" placeholder="Enter the Control File Name" name="ctrlFileName" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="well well-lg" style="width:1250px; margin-left:-50px">
+                <div class="row">
+                    <div class="col-xs-2">
+                        <!-- <p>
+                                    <a data-toggle="collapse" data-target="#configuration" (click)="ShowHideConfiguration()">
+                                        <span class="glyphicon glyphicon-plus" [(hidden)] ="toggleConfiguration"></span>
+                                        <span class="glyphicon glyphicon-minus" ></span>
+                                    </a>
+                                </p> -->
+                        <button type="button" class="btn btn-default" data-toggle="collapse" data-target="#bridging" (click)="ShowHideBridging()">{{ toggleBridging ? "Show" : "Hide"}}</button>
+                    </div>
+                    <div class="col-xs-1">
+                        <h4 style="margin-left:-75px">
+                            <u>Bridging</u>
+                        </h4>
+                    </div>
+                </div>
+                <br>
+                <div id="bridging" class="collapse">
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <label>Product</label>
+                            <div class="form-group">
+                                <label class="radio-inline">
+                                    <input type="radio" name="Product">Yes</label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="Product">No</label>
+                            </div>
+                        </div>
+                        <div class="col-xs-4">
+                            <label>Validate Quantity</label>
+                            <div class="form-group">
+                                <label class="radio-inline">
+                                    <input type="radio" name="Validatequantity">Yes</label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="Validatequantity">No</label>
+                            </div>
+                        </div>
+                        <div class="col-xs-4">
+                            <label>Validate Cost</label>
+                            <div class="form-group">
+                                <label class="radio-inline">
+                                    <input type="radio" name="Validatecost">Yes</label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="Validatecost">No</label>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <label>Primary Plan</label>
+                            <div class="form-group">
+                                <label class="radio-inline">
+                                    <input type="radio" name="PrimaryPlan">Yes</label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="PrimaryPlan">No</label>
+                            </div>
+                        </div>
+                        <div class="col-xs-4">
+                            <label>Secondary Plan</label>
+                            <div class="form-group">
+                                <label class="radio-inline">
+                                    <input type="radio" name="SecondaryPlan">Yes</label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="SecondaryPlan">No</label>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-xs-2">
+                            <label>Prescriber</label>
+                            <div class="form-group">
+                                <label class="radio-inline">
+                                    <input type="radio" name="Prescriber">Yes</label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="Prescriber">No</label>
+                            </div>
+                        </div>
+                        <div class="col-xs-2">
+                            <label>Match Preference</label>
+                        </div>
+                        <div class="col-xs-4">
+                            <label>Default unmatched Records</label>
+                            <div class="form-group">
+                                <label class="radio-inline">
+                                    <input type="radio" name="UnmatchedRecord">Yes</label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="UnmatchedRecord">No</label>
+                            </div>
+                        </div>
+                        <div class="col-xs-4">
+                            <div class="form-group">
+                                <label>Default Value</label>
+                                <input type="text" #defaultValue [(ngModel)]="DefaultValue" placeholder="Enter default value" name="DefaultValue" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-xs-2">
+                            <label>Outlet</label>
+                            <div class="form-group">
+                                <label class="radio-inline">
+                                    <input type="radio" name="Outlet">Yes</label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="Outlet">No</label>
+                            </div>
+                        </div>
+                        <div class="col-xs-2">
+                            <label>Match Preference</label>
+                        </div>
+                        <div class="col-xs-4">
+                            <label>Default unmatched Records</label>
+                            <div class="form-group">
+                                <label class="radio-inline">
+                                    <input type="radio" name="UnmatchedRecord">Yes</label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="UnmatchedRecord">No</label>
+                            </div>
+                        </div>
+                        <div class="col-xs-4">
+                            <div class="form-group">
+                                <label>Default Value</label>
+                                <input type="text" #defaultValue [(ngModel)]="DefaultValue" placeholder="Enter default value" name="DefaultValue" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-xs-2">
+                            <label>Account</label>
+                            <div class="form-group">
+                                <label class="radio-inline">
+                                    <input type="radio" name="Outlet">Yes</label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="Outlet">No</label>
+                            </div>
+                        </div>
+                        <div class="col-xs-2">
+                            <label>Match Preference</label>
+                        </div>
+                        <div class="col-xs-4">
+                            <label>Default unmatched Records</label>
+                            <div class="form-group">
+                                <label class="radio-inline">
+                                    <input type="radio" name="UnmatchedRecord">Yes</label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="UnmatchedRecord">No</label>
+                            </div>
+                        </div>
+                        <div class="col-xs-4">
+                            <div class="form-group">
+                                <label>Default Value</label>
+                                <input type="text" #defaultValue [(ngModel)]="DefaultValue" placeholder="Enter default value" name="DefaultValue" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <label>Apply Restatement</label>
+                            <div class="form-group">
+                                <label class="radio-inline">
+                                    <input type="radio" name="ApplyRestat">Yes</label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="ApplyRestat">No</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="well well-lg" style="width:1250px; margin-left:-50px">
+                <div class="row">
+                    <div class="col-xs-2">
+                        <button type="button" class="btn btn-default" data-toggle="collapse" data-target="#Layout" (click)="ShowHideLayout()">{{ toggleLayout ? "Show" : "Hide"}}</button>
+                    </div>
+                    <div class="col-xs-1">
+                        <h4 style="margin-left:-75px">
+                            <u>Layout</u>
+                        </h4>
+                    </div>
+                </div>
+                <div class="collapse" id="Layout">
+                    <ag-grid-angular style="width: 1100px; height: 350px;margin-left:30px" class="ag-fresh" [rowData]="rowData" [columnDefs]="columnDefs"
+                        [gridOptions]="gridOptions" (gridReady)="onGridReady($event)" (rowClicked)='onRowClicked($event)' (cellEditingStarted)='onCellEditingStarted($event)'
+                        (cellEditingStopped)='onCellEditingStopped($event)' (selectionChanged)='onSelectionChanged($event)' (cellValueChanged)='onCellValueChanged($event)'
+                        (dragstart)="setDrag($event)" (dragStopped)="dragStopped($event)" (dragover)="onDragOver($event)" (drop)="onDrop($event)"
+                        enableFilter enableSorting id="myGrid" #grid>
+                    </ag-grid-angular>
+                </div>
+            </div>
+            <div class="well well-lg" style="width:1250px; margin-left:-50px">
+                <div class="row">
+                    <div class="col-xs-2">
+                        <button type="button" class="btn btn-default" data-toggle="collapse" data-target="#rules" (click)="ShowHideRules()">{{ toggleRules ? "Show" : "Hide"}}</button>
+                    </div>
+                    <div class="col-xs-1">
+                        <h4 style="margin-left:-75px">
+                            <u>Rules</u>
+                        </h4>
+                    </div>
+                </div>
+                <br>
+                <div class="collapse" id="rules">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-xs-10">
+                                <label>Search</label>
+                                <input style="width:500px" type="text" #rulesSearch [(ngModel)]="RulesSearchValue" placeholder="Enter Value" name="RulesSearchValue" class="form-control">
+                            </div>
+                            <div class="col-xs-2">
+                                <button type="button" class="btn btn-default">GO</button>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <ag-grid-angular style="width: 500px; height: 350px;margin-left:30px" class="ag-fresh" [rowData]="rowDataRulesOne" [columnDefs]="columnDefsRulesOne"
+                                [gridOptions]="gridOptionsRulesOne" (gridReady)="onGridReady($event)" (rowClicked)='onRowClicked($event)' (cellEditingStarted)='onCellEditingStarted($event)'
+                                (cellEditingStopped)='onCellEditingStopped($event)' (selectionChanged)='onSelectionChangedRulesOne($event)' (cellValueChanged)='onCellValueChanged($event)'
+                                (dragstart)="setDrag($event)" (dragStopped)="dragStopped($event)" (dragover)="onDragOver($event)" (drop)="onDrop($event)"
+                                enableFilter enableSorting id="myGridRulesOne" #grid>
+                            </ag-grid-angular>    
+                            </div>
+                            <div class="col-lg-6">
+                                <ag-grid-angular style="width: 500px; height: 350px;margin-left:30px" class="ag-fresh" [rowData]="rowDataRulesTwo" [columnDefs]="columnDefsRulesTwo"
+                                [gridOptions]="gridOptionsRulesTwo" (gridReady)="onGridReady($event)" (rowClicked)='onRowClicked($event)' (cellEditingStarted)='onCellEditingStarted($event)'
+                                (cellEditingStopped)='onCellEditingStopped($event)' (selectionChanged)='onSelectionChangedRulesTwo($event)' (cellValueChanged)='onCellValueChanged($event)'
+                                (dragstart)="setDrag($event)" (dragStopped)="dragStopped($event)" (dragover)="onDragOver($event)" (drop)="onDrop($event)"
+                                enableFilter enableSorting id="myGridRulesTwo" #grid>
+                            </ag-grid-angular>    
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="well well-lg" style="width:1250px; margin-left:-50px">
+                <div class="row">
+                    <div class="col-xs-2">
+                        <button type="button" class="btn btn-default" data-toggle="collapse" data-target="#productsContracted" (click)="ShowHideProducts()">{{ toggleProducts ? "Show" : "Hide"}}</button>
+                    </div>
+                    <div class="col-xs-1">
+                        <h4 style="margin-left:-75px">
+                            <u>Products Contracted</u>
+                        </h4>
+                    </div>
+                </div>
+                <br>
+                <div class="collapse" id="productsContracted">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-xs-10">
+                                <label>Search</label>
+                                <input style="width:500px" type="text" #rulesSearch [(ngModel)]="RulesSearchValue" placeholder="Enter Value" name="RulesSearchValue" class="form-control">
+                            </div>
+                            <div class="col-xs-2">
+                                <button type="button" class="btn btn-default">GO</button>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <ag-grid-angular style="width: 500px; height: 350px;margin-left:30px" class="ag-fresh" [rowData]="rowDataRulesOne" [columnDefs]="columnDefsRulesOne"
+                                [gridOptions]="gridOptionsRulesOne" (gridReady)="onGridReady($event)" (rowClicked)='onRowClicked($event)' (cellEditingStarted)='onCellEditingStarted($event)'
+                                (cellEditingStopped)='onCellEditingStopped($event)' (selectionChanged)='onSelectionChangedRulesOne($event)' (cellValueChanged)='onCellValueChanged($event)'
+                                (dragstart)="setDrag($event)" (dragStopped)="dragStopped($event)" (dragover)="onDragOver($event)" (drop)="onDrop($event)"
+                                enableFilter enableSorting id="myGridRulesOne" #grid>
+                            </ag-grid-angular>    
+                            </div>
+                            <div class="col-lg-6">
+                                <ag-grid-angular style="width: 500px; height: 350px;margin-left:30px" class="ag-fresh" [rowData]="rowDataRulesTwo" [columnDefs]="columnDefsRulesTwo"
+                                [gridOptions]="gridOptionsRulesTwo" (gridReady)="onGridReady($event)" (rowClicked)='onRowClicked($event)' (cellEditingStarted)='onCellEditingStarted($event)'
+                                (cellEditingStopped)='onCellEditingStopped($event)' (selectionChanged)='onSelectionChangedRulesTwo($event)' (cellValueChanged)='onCellValueChanged($event)'
+                                (dragstart)="setDrag($event)" (dragStopped)="dragStopped($event)" (dragover)="onDragOver($event)" (drop)="onDrop($event)"
+                                enableFilter enableSorting id="myGridRulesTwo" #grid>
+                            </ag-grid-angular>    
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="well well-lg" style="width:1250px; margin-left:-50px">
+                <div class="row">
+                    <div class="col-xs-2">
+                        <button type="button" class="btn btn-default" data-toggle="collapse" data-target="#outletsContracted" (click)="ShowHideOutlets()">{{ toggleOutlets ? "Show" : "Hide"}}</button>
+                    </div>
+                    <div class="col-xs-1">
+                        <h4 style="margin-left:-75px">
+                            <u>Outlets Contracted</u>
+                        </h4>
+                    </div>
+                </div>
+                <br>
+                <div class="collapse" id="outletsContracted">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-xs-10">
+                                <label>Search</label>
+                                <input style="width:500px" type="text" #rulesSearch [(ngModel)]="RulesSearchValue" placeholder="Enter Value" name="RulesSearchValue" class="form-control">
+                            </div>
+                            <div class="col-xs-2">
+                                <button type="button" class="btn btn-default">GO</button>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <ag-grid-angular style="width: 500px; height: 350px;margin-left:30px" class="ag-fresh" [rowData]="rowDataRulesOne" [columnDefs]="columnDefsRulesOne"
+                                [gridOptions]="gridOptionsRulesOne" (gridReady)="onGridReady($event)" (rowClicked)='onRowClicked($event)' (cellEditingStarted)='onCellEditingStarted($event)'
+                                (cellEditingStopped)='onCellEditingStopped($event)' (selectionChanged)='onSelectionChangedRulesOne($event)' (cellValueChanged)='onCellValueChanged($event)'
+                                (dragstart)="setDrag($event)" (dragStopped)="dragStopped($event)" (dragover)="onDragOver($event)" (drop)="onDrop($event)"
+                                enableFilter enableSorting id="myGridRulesOne" #grid>
+                            </ag-grid-angular>    
+                            </div>
+                            <div class="col-lg-6">
+                                <ag-grid-angular style="width: 500px; height: 350px;margin-left:30px" class="ag-fresh" [rowData]="rowDataRulesTwo" [columnDefs]="columnDefsRulesTwo"
+                                [gridOptions]="gridOptionsRulesTwo" (gridReady)="onGridReady($event)" (rowClicked)='onRowClicked($event)' (cellEditingStarted)='onCellEditingStarted($event)'
+                                (cellEditingStopped)='onCellEditingStopped($event)' (selectionChanged)='onSelectionChangedRulesTwo($event)' (cellValueChanged)='onCellValueChanged($event)'
+                                (dragstart)="setDrag($event)" (dragStopped)="dragStopped($event)" (dragover)="onDragOver($event)" (drop)="onDrop($event)"
+                                enableFilter enableSorting id="myGridRulesTwo" #grid>
+                            </ag-grid-angular>    
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>        
+        </form>
+    </div>
+</body>

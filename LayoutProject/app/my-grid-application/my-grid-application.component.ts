@@ -725,7 +725,6 @@ export class MyGridApplicationComponent {
         else {
             if (this.path == "delete" || this.path == "clone" || this.path == "export") {
                 this.isSaveDisabled = false;
-                this.appService.isSavePending = true;
             }
             else {
                 this.isSaveDisabled = true;

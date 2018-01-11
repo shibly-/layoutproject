@@ -1,5 +1,6 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { AppService } from "./app.service";
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -10,16 +11,23 @@ import { AppService } from "./app.service";
 export class AppComponent {
 
     private activeMenu: string = "";
-    private hideExtraDiv: boolean = false;  
+    private isLayout: boolean;
+    private hideExtraDiv: boolean = false;
+     
     setActiveMenu(_activeMenu: string) {
         if (this.appService.isSavePending) {
             return;
         }
-
         this.activeMenu = _activeMenu;
         this.hideExtraDiv = true;
     }
-    constructor(private appService: AppService) {
+    constructor(private appService: AppService, private route: ActivatedRoute) {
         this.activeMenu = this.appService.activeMenu;
+
+        if (window.location.pathname == '/Home/ClientSupplierSetup') {
+            this.isLayout = false;
+        } else {
+            this.isLayout = true;
+        }
     }    
 }
