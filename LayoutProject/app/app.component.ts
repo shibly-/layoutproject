@@ -12,6 +12,10 @@ export class AppComponent {
     private activeMenu: string = "";
     private hideExtraDiv: boolean = false;  
     setActiveMenu(_activeMenu: string) {
+        if (this.appService.isSavePending) {
+            return;
+        }
+
         this.activeMenu = _activeMenu;
         this.hideExtraDiv = true;
     }

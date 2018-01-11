@@ -23,6 +23,7 @@ export class AppService{
     STDColumnList: any[] = [];
     maxLayoutID: any = 0; 
     ColumnDataTypeList: any[] = [];
+    isSavePending: boolean;
 
     public notifier$: Subject<any>;
 

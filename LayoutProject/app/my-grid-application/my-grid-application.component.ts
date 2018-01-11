@@ -56,6 +56,8 @@ export class MyGridApplicationComponent {
         if (this.path == "home") {
             return;
         }
+        this.isSaveDisabled = true;
+        this.appService.isSavePending = false;
 
         this.service.rowCount = 1;
         this.formOptions();
@@ -66,7 +68,6 @@ export class MyGridApplicationComponent {
             this.declare_rowData();
         }
         this.declare_gridOptions();
-        this.isSaveDisabled = true;
     }
 
     ngOnInit() {
@@ -361,6 +362,7 @@ export class MyGridApplicationComponent {
             && d.IMS_COLUMN_NAME != "" && d.COL_ORDER != "" && d.DATA_COLUMN_TYPE != "") {
             this.onAddClicked();
             this.isSaveDisabled = false;
+            this.appService.isSavePending = true;
         }
     }
 
@@ -368,6 +370,7 @@ export class MyGridApplicationComponent {
         if (this.path == "edit") {
             if (event.oldValue !== event.newValue) {
                 this.isSaveDisabled = false;
+                this.appService.isSavePending = true;
             }
         }
     }
@@ -414,6 +417,7 @@ export class MyGridApplicationComponent {
     private Add(data) {
         if (!this.form.validateLayout(this.form.Layout_Description)) {
             this.isSaveDisabled = true;
+            this.appService.isSavePending = false;
         } else {
             for (let i in data) {
                 if (data[i].COL_NAME == "" && data[i].IMS_COLUMN_NAME == "" && data[i].DATA_COLUMN_TYPE == "") {
@@ -485,6 +489,7 @@ export class MyGridApplicationComponent {
                     jQuery("#lpNotificationModalBtn").trigger('click');
 
                     this.isSaveDisabled = true;
+                    this.appService.isSavePending = false;
                     if (this.appService.LayoutList.length) {
                         this.appService.LayoutList.push(this.layoutData.Layout_Description);
                         this.appService.layoutdata.push(this.layoutData);
@@ -539,6 +544,7 @@ export class MyGridApplicationComponent {
         this.appService.saveLayoutList(layoutDataWrapper).subscribe((data) => {
             if (data) {
                 this.isSaveDisabled = true;
+                this.appService.isSavePending = false;
                 this.setNotificationModalContent('Notification', MESSAGE_CONST.SAVE_SUCCEED);
                 jQuery("#lpNotificationModalBtn").trigger('click');
             } else {
@@ -570,15 +576,14 @@ export class MyGridApplicationComponent {
             Columns: data,
             Active_Ind: true
         }
-
-        this.isCloneHidden = true;
-        this.isSaveDisabled = true;
+        
         this.appService.addToList(this.layoutData).subscribe((data) => {
             if (data) {
                 this.setNotificationModalContent('Notification', MESSAGE_CONST.SAVE_SUCCEED);
                 jQuery("#lpNotificationModalBtn").trigger('click');
 
                 this.isSaveDisabled = true;
+                this.appService.isSavePending = false;
                 if (this.appService.LayoutList.length) {
                     this.appService.LayoutList.push(this.layoutData.Layout_Description);
                     this.appService.layoutdata.push(this.layoutData);
@@ -684,6 +689,7 @@ export class MyGridApplicationComponent {
 
     private onCancelClicked() {
         this.isSaveDisabled = true;
+        this.appService.isSavePending = false;
         if (this.path == "add") {
             this.form.Layout_Description = '';
             this.form.layout_id = null;
@@ -714,13 +720,16 @@ export class MyGridApplicationComponent {
     public ViewGrid(event) {
         if (this.path == "add") {
             this.isSaveDisabled = false;
+            this.appService.isSavePending = true;
         }
         else {
             if (this.path == "delete" || this.path == "clone" || this.path == "export") {
                 this.isSaveDisabled = false;
+                this.appService.isSavePending = true;
             }
             else {
                 this.isSaveDisabled = true;
+                this.appService.isSavePending = false;
             }
 
             if (event !== "default") {
@@ -742,6 +751,7 @@ export class MyGridApplicationComponent {
                     for (let i in _columns) {
                         if (_columns[i].COL_NAME != "" && _columns[i].IMS_COLUMN_NAME == "New One Needed") {
                             this.isSaveDisabled = true;
+                            this.appService.isSavePending = false;
                             if (this.path == "clone") {
                                 this.isCloneHidden = true;
                             }
@@ -796,5 +806,14 @@ export class MyGridApplicationComponent {
     public setNotificationModalContent(_title: string, _bodyContent: string) {
         this.nfModalTitle = _title;
         this.nfModalBody = _bodyContent;
+    }
+
+    canDeactivate() {
+        if (this.appService.isSavePending) {
+            this.setNotificationModalContent('Warning!', 'You have pending changes!!');
+            jQuery("#lpNotificationModalBtn").trigger('click');
+            return false;
+        }
+        return true;
     }
 }

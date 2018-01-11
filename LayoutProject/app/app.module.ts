@@ -10,17 +10,18 @@ import {FormComponent} from "./my-form/Form.component";
 import {EditorComponent} from "./my-editor/editor.component";
 import {EmployeeService} from './my-grid-application/my-grid-data.service';
 import {AppService} from "./app.service";
+import {DeactivateGuardService} from "./deactivate-guard.service";
 import {HttpModule} from '@angular/http';
 
 const routes: Routes = [
     { path: 'Home/Layout', redirectTo: 'home', pathMatch: 'full' },
     { path: 'home', component: MyGridApplicationComponent },
-    { path: 'add', component: MyGridApplicationComponent },
-    { path: 'edit', component: MyGridApplicationComponent },
-    { path: 'view', component: MyGridApplicationComponent },
-    { path: 'delete', component: MyGridApplicationComponent },
-    { path: 'clone', component: MyGridApplicationComponent },
-    { path: 'export', component: MyGridApplicationComponent }
+    { path: 'add', component: MyGridApplicationComponent, canDeactivate: [DeactivateGuardService] },
+    { path: 'edit', component: MyGridApplicationComponent, canDeactivate: [DeactivateGuardService] },
+    { path: 'view', component: MyGridApplicationComponent, canDeactivate: [DeactivateGuardService] },
+    { path: 'delete', component: MyGridApplicationComponent, canDeactivate: [DeactivateGuardService] },
+    { path: 'clone', component: MyGridApplicationComponent, canDeactivate: [DeactivateGuardService] },
+    { path: 'export', component: MyGridApplicationComponent, canDeactivate: [DeactivateGuardService] }
 ];
 
 @NgModule({
@@ -40,7 +41,7 @@ const routes: Routes = [
         ),
         RouterModule.forRoot(routes)
     ],
-    providers: [EmployeeService, AppService],
+    providers: [EmployeeService, AppService, DeactivateGuardService],
     bootstrap: [AppComponent]
 })
 export class AppModule {
