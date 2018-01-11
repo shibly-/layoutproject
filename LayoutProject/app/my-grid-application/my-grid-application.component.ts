@@ -48,6 +48,8 @@ export class MyGridApplicationComponent {
 
     clone_layout_id: number;
     clone_layout_desc: string;
+    tabToJump: string;
+    isValidDescription: boolean = false;   
 
     constructor(private route: ActivatedRoute, private service: EmployeeService, private appService: AppService, private http: Http) {
         this.appService.activeMenu = this.path = this.route.snapshot.url.join('/');
@@ -102,7 +104,6 @@ export class MyGridApplicationComponent {
     }
 
     private declare_standardColNames() {
-        //this.Standard_col_values = this.service.getStandard_col_val();
         if (this.appService.STDColumnList.length) {
             this.Standard_col_values = this.appService.STDColumnList;
             return;
@@ -116,7 +117,16 @@ export class MyGridApplicationComponent {
     }
 
     private declare_dataTypes() {
-        this.Datatype_values = this.service.getDatavalues();
+        if (this.appService.ColumnDataTypeList.length) {
+            this.Datatype_values = this.appService.ColumnDataTypeList;
+            return;
+        }
+
+        this.appService.getLayoutColDataTypeList().subscribe(data => {
+            let d = JSON.parse(data);
+            this.Datatype_values = d;
+            this.appService.ColumnDataTypeList = d;
+        });
     }
 
     private _booleanValues = {
@@ -138,7 +148,7 @@ export class MyGridApplicationComponent {
                 headerName: "Attribute Name",
                 field: "COL_NAME",
                 editable: this.decideEdit(),
-                width: 335
+                width: 315
             },
             {
                 headerName: "Standard Attribute Name",
@@ -148,7 +158,7 @@ export class MyGridApplicationComponent {
                 cellEditorParams: {
                     values: this.Standard_col_values,
                 },
-                width: 335
+                width: 315
             },
             {
                 headerName: "Data type",
@@ -158,7 +168,7 @@ export class MyGridApplicationComponent {
                 cellEditorParams: {
                     values: this.Datatype_values
                 },
-                width: 100,
+                width: 140,
                 cellClass: 'text-center'
             },
             {
@@ -187,10 +197,13 @@ export class MyGridApplicationComponent {
     }
 
     private decideEdit() {
-        if ((this.path == 'add') || (this.path == "edit")) {
+        if (this.path == 'add') {
+            return this.isValidDescription;
+        }
+        else if (this.path == "edit") {
             return true;
         }
-        if ((this.path == "view") || (this.path == "clone")) {
+        else if ((this.path == "view") || (this.path == "clone")) {
             return false;
         }
     }
@@ -652,6 +665,7 @@ export class MyGridApplicationComponent {
             this.form.Layout_Description = '';
             this.form.layout_id = null;
             this.service.rowCount = 1;
+            this.form.addedLayoutAlreadyExists = false;
             let data = [{
                 COL_ID: 0, COL_ORDER: this.service.rowCount,
                 COL_NAME: "", IMS_COLUMN_NAME: "", DATA_COLUMN_TYPE: "",
@@ -721,6 +735,11 @@ export class MyGridApplicationComponent {
                 this.isGridHidden = true;
             }
         }
+    }
+
+    public CheckAddLayout(event: boolean) {
+        this.isValidDescription = event;
+        this.declare_colDefs();            
     }
 
     public visible = false;

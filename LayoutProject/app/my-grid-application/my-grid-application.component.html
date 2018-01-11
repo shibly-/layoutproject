@@ -1,5 +1,6 @@
 <div>
-    <my-form [layoutOptions]="SearchFormOptions" (onLayoutChange)= "ViewGrid($event)"></my-form>
+    <my-form [layoutOptions]="SearchFormOptions" (onLayoutChange)= "ViewGrid($event)" 
+             (onAddLayoutChange)="CheckAddLayout($event)"></my-form>
 </div>
 <br>
 <br>

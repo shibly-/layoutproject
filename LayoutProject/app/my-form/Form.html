@@ -3,9 +3,10 @@
         <div class="row" #addForm [(hidden)]="isAddRowhidden">
             <div class="col-xs-5">
                 <div class="form-group" [class.has-error]="haslayoutError">
-                    <label>{{ label }}</label>
-                    <input type="text" #layoutDescr [(ngModel)]="Layout_Description" placeholder="Enter layout Description" name="layoutDescr"
-                        class="form-control" (change)="validateLayout(layoutDescr.value)">
+                    <label>{{ label }} <span id="addedLayoutAlreadyExists" [(hidden)]="!addedLayoutAlreadyExists" [class.control-label]="addedLayoutAlreadyExists">&nbsp;&nbsp;(Already Exists!)</span></label>
+                    <input type="text" #layoutDescrAdd [(ngModel)]="Layout_Description" placeholder="Enter layout Description" name="layoutDescrAdd"
+                        class="form-control" (change)="validateLayout(layoutDescrAdd.value)" 
+                           (focus)="checkAddLayoutDescr(layoutDescrAdd.value, false)" (blur)="checkAddLayoutDescr(layoutDescrAdd.value, true)">
                 </div>
             </div>
             <div class="col-xs-5">

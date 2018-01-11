@@ -22,6 +22,7 @@ export class AppService{
     activeMenu: string = "";
     STDColumnList: any[] = [];
     maxLayoutID: any = 0; 
+    ColumnDataTypeList: any[] = [];
 
     public notifier$: Subject<any>;
 
@@ -55,19 +56,23 @@ export class AppService{
             .map((res: any) => res.json());
     }
 
+    public getLayoutColDataTypeList() {
+        return this.http.get('api/AggridData/getLayoutColDataTypeList')
+            .map((res: any) => res.json());
+    }
+
     public saveLayoutList(data) {
-        //var jsonData = JSON.stringify(data);
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
         return this.http.post('api/MongoDB/updateLayoutData', data, options).map((res: any) => res.json());
     }
 
     public addToList(data){
-        //var jsonData = JSON.stringify(data);
         let headers=new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers});
         return this.http.post('api/MongoDB/insertLayoutData', data,options).map((res:any) => res.json());
     }
+
     messageDialog(title: string, message: string, callback?: Function) {
         this.notifyAll({ key: 'messageDialog', value: { title: title, message: message, callback: callback } });
     }
