@@ -162,7 +162,7 @@ export class MyGridApplicationComponent {
                 width: 315
             },
             {
-                headerName: "Data type",
+                headerName: "Data Type",
                 field: "DATA_COLUMN_TYPE",
                 editable: this.decideEdit(),
                 cellEditor: 'richSelect',
@@ -416,11 +416,32 @@ export class MyGridApplicationComponent {
             this.isSaveDisabled = true;
         } else {
             for (let i in data) {
-                if (data[i].COL_NAME == "" || data[i].IMS_COLUMN_NAME == "" || data[i].DATA_COLUMN_TYPE == "") {
+                if (data[i].COL_NAME == "" && data[i].IMS_COLUMN_NAME == "" && data[i].DATA_COLUMN_TYPE == "") {
                     this.onDeleteClicked(data[i]);
                 }
             }
 
+            if (data.length) {
+                for (let i in data) {
+                    if (data[i].COL_NAME == "") {
+                        alert('Enter Attribute Name.');
+                        return;
+                    }
+                    else if (data[i].IMS_COLUMN_NAME == "") {
+                        alert('Enter Standard Attribute Name.');
+                        return;
+                    }
+                    else if (data[i].DATA_COLUMN_TYPE == "") {
+                        alert('Enter Data Type.');
+                        return;
+                    }
+                }
+            }
+            else {
+                alert('No valid Attribute found to add!');
+                return;
+            }               
+            
             for (let row of data) {
                 let index = data.indexOf(row);
                 if (index == data.length - 1) {
@@ -630,7 +651,8 @@ export class MyGridApplicationComponent {
             }
 
             var layoutDataLabel = "LayoutDetails"; //this.form.layoutOption.toString();
-            let layoutDataWrapper: any = { [layoutDataLabel]: this.layoutData };
+            let layoutDataWrapper: any = this.appService.layoutdata.filter(_ => _.Layout_id == this.form.layout_id);
+                     //{ [layoutDataLabel]: this.layoutData };
             let layoutDataAsJSON = JSON.stringify(layoutDataWrapper);
             let uri = "data:application/json;charset=UTF-8," + encodeURIComponent(layoutDataAsJSON);
 

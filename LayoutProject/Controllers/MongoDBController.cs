@@ -67,6 +67,7 @@ namespace LayoutProject.Controllers
                 var layoutData = new List<Layout>();
                 foreach (var _data in data) {
                     var layout = new Layout();
+                    layout._id = _data["_id"].ToString();
                     layout.Layout_id = _data["Layout_id"].ToString();
                     layout.Layout_Description = _data["Layout_Description"].ToString();
 
@@ -265,6 +266,7 @@ namespace LayoutProject.Controllers
 
         public class Layout
         {
+            public string _id { get; set; }
             public string Layout_id { get; set; }
             public string Layout_Description { get; set; }
             public List<Columns> Columns { get; set; }
