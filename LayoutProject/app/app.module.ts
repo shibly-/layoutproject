@@ -12,13 +12,15 @@ import {EmployeeService} from './my-grid-application/my-grid-data.service';
 import {AppService} from "./app.service";
 import {HttpModule} from '@angular/http';
 
-const routes : Routes = [
-    {path:'add',component: MyGridApplicationComponent},
-    {path:'edit', component:MyGridApplicationComponent},
-    {path:'view', component:MyGridApplicationComponent},
-    {path:'delete', component:MyGridApplicationComponent},
-    {path:'clone', component:MyGridApplicationComponent},
-    {path:'export', component:MyGridApplicationComponent}
+const routes: Routes = [
+    { path: 'Home/Layout', redirectTo: 'home', pathMatch: 'full' },
+    { path: 'home', component: MyGridApplicationComponent },
+    { path: 'add', component: MyGridApplicationComponent },
+    { path: 'edit', component: MyGridApplicationComponent },
+    { path: 'view', component: MyGridApplicationComponent },
+    { path: 'delete', component: MyGridApplicationComponent },
+    { path: 'clone', component: MyGridApplicationComponent },
+    { path: 'export', component: MyGridApplicationComponent }
 ];
 
 @NgModule({

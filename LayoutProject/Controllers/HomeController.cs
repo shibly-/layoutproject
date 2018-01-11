@@ -13,6 +13,16 @@ namespace LayoutProject.Controllers
             return View();
         }
 
+        public ActionResult Layout()
+        {
+            return View();
+        }
+
+        public ActionResult ClientSupplierSetup()
+        {
+            return View();
+        }
+
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";

@@ -23,7 +23,7 @@
                         (change)="validateLayoutDescr(layoutDescr.value)">
 
                         <option value="default">Select a layout description..</option>
-                        <option *ngFor="let layout of layoutOptions">
+                        <option *ngFor="let layout of layoutOptions" [selected]="layout == firstLayout">
                             {{ layout }}
                         </option>
                     </select>

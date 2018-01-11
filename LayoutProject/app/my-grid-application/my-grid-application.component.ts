@@ -51,6 +51,9 @@ export class MyGridApplicationComponent {
 
     constructor(private route: ActivatedRoute, private service: EmployeeService, private appService: AppService, private http: Http) {
         this.appService.activeMenu = this.path = this.route.snapshot.url.join('/');
+        if (this.path == "home") {
+            return;
+        }
         this.service.rowCount = 1;
         this.formOptions();
         this.declare_standardColNames();
@@ -99,7 +102,17 @@ export class MyGridApplicationComponent {
     }
 
     private declare_standardColNames() {
-        this.Standard_col_values = this.service.getStandard_col_val();
+        //this.Standard_col_values = this.service.getStandard_col_val();
+        if (this.appService.STDColumnList.length) {
+            this.Standard_col_values = this.appService.STDColumnList;
+            return;
+        }
+
+        this.appService.getSTDColumnList().subscribe(data => {
+            let d = JSON.parse(data);
+            this.Standard_col_values = d;
+            this.appService.STDColumnList = d;
+        });
     }
 
     private declare_dataTypes() {

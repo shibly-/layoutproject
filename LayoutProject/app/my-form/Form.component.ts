@@ -20,6 +20,7 @@ export class FormComponent{
     hideLayoutMsg: boolean = true;
     layoutRelatedMsg: string = "";
     filteredData : any[];
+    firstLayout: string = "";
 
     constructor(private route:ActivatedRoute, private appService : AppService){
         this.path = this.route.snapshot.url.join('/');
@@ -44,6 +45,13 @@ export class FormComponent{
                 if (d[i].Layout_id > this.appService.maxLayoutID)
                     this.appService.maxLayoutID = d[i].Layout_id;
             }
+
+            // call the first layout, if any 
+            if (this.appService.LayoutList.length) {
+                this.firstLayout = this.appService.LayoutList[0];
+                this.validateLayoutDescr(this.appService.LayoutList[0]);
+            }
+                
         });
     }
 
